@@ -10,16 +10,16 @@ describe 'App' do
   
   describe 'GET /status' do
     
-    context 'when param are invalid' do
+    context 'when params are invalid' do
       it 'responds with 400' do
         get '/status/week:193451539'
         expect(last_response.status).to eq(400)
       end
     end
 
-    context 'when param are valid' do
+    context 'when params are valid' do
 
-      it 'returns a has of values' do
+      it 'returns a hash of values' do
         report = double('student')
 
 
