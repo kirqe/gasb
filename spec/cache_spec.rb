@@ -16,7 +16,7 @@ describe "Cache" do
   end
 
   describe 'self.set(key, value = {})' do
-    it 'saves an item to cache' do
+    it 'saves an item to the cache' do
       new_hash = { term: 'now:12345', value: 12345 }
       expect(Cache.set('now:12345', new_hash)).to eq(true)
     end    

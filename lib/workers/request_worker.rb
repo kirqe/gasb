@@ -2,11 +2,12 @@ class RequestWorker
   include Sidekiq::Worker
   
   def perform(term, client_email, args={})    
-    repo = ReportRepository.new(parser: CacheReportParser)
-    service = ServiceRegistry.select_service(term, client_email)
+    account = Account.new(client_email)
 
-    repo.update(term, { value: service.call, updated_at: Time.now })    
+    if account
+      repo = ReportRepository.new(parser: CacheReportParser)
+      new_value = Service.call(term, account)
+      repo.update(term, { value: new_value, updated_at: Time.now })
+    end
   end
 end
-
-

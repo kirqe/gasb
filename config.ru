@@ -2,7 +2,7 @@ require './config/environment'
 
 Sidekiq.configure_client do |config|
   config.redis = { url: ENV['REDIS_URL'] }
-  config.average_scheduled_poll_interval = 2 # reduce worker delay
+  config.average_scheduled_poll_interval = 15 # reduce worker delay
 end
 
 use Rack::Throttle::Rules, 
