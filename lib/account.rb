@@ -1,8 +1,10 @@
 class Account
   include Google::Apis::AnalyticsV3
 
+  attr_reader :service
+  
   def initialize(email)
-    account(email)
+    @service = account(email)
   end
 
   private

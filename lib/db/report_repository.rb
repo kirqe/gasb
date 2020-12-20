@@ -26,6 +26,15 @@ class ReportRepository
     report
   end  
 
+  def find_of_ref(id)
+    report = nil
+    if Cache.exists?(id)
+      data = parsed_hash(id)
+      report = Report.new_of_ref(id, data)
+    end
+    report
+  end    
+
   def delete(id)
     Cache.delete(id)
   end
@@ -36,7 +45,7 @@ class ReportRepository
 
   private
     # redis returns values as Strings
-    # use custom parser class to transform values
+    # use parser class to transform values
     def parsed_hash(id)
       data = Cache.get(id)
       if @parser

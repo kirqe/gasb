@@ -7,6 +7,7 @@ class RequestWorker
     if account
       repo = ReportRepository.new(parser: CacheReportParser)
       new_value = Service.call(term, account)
+      
       repo.update(term, { value: new_value, updated_at: Time.now })
     end
   end

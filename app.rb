@@ -2,14 +2,14 @@ class App < Sinatra::Application
   get "/status/:term" do
     if valid_params(params)
       term = params[:term]
-      client_email = params[:ce]   
+      email = params[:e]   
 
       repo = ReportRepository.new(parser: CacheReportParser)
-      report = repo.find(term)
+      report = repo.find_of_ref(term)
 
       if report
         if report.can_be_updated?
-          RequestWorker.perform_async(term, client_email)
+          RequestWorker.perform_async(term, email)
         end
       else
         report = repo.create(term)
@@ -21,20 +21,16 @@ class App < Sinatra::Application
     end
   end
 
-  # list of service account emails
-  get "/services" do
-    service_account_emails.to_json
-  end
+  private
+    def valid_params(params)
+      valid_term = /(now|day|week|month):([0-9]+)/
+      
+      params[:term].match?(valid_term) && 
+      service_account_emails.include?(params[:e])
+    end
 
-  def valid_params(params)
-    valid_term = /(now|day|week|month):([0-9]+)/
-    
-    params[:term].match?(valid_term) && 
-    service_account_emails.include?(params[:ce])
-  end
-
-  def service_account_emails
-    Dir["./keys/*.json"].map { |e| e.match(/keys\/(.*).json/,1)[1] }
-  end
+    def service_account_emails
+      Dir["./keys/*.json"].map { |e| e.match(/keys\/(.*).json/,1)[1] }
+    end
 end
 

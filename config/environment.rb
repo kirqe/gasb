@@ -7,10 +7,13 @@ require 'google/apis/analytics_v3'
 require 'rack/throttle'
 require 'mock_redis'
 
-# $redis = MockRedis.new
+if ENV['RACK_ENV'] == 'test'
+  $redis = MockRedis.new
+else
+  $redis = Redis.new( url: ENV['REDIS_URL'] )
+end
 
-$redis = Redis.new( url: ENV['REDIS_URL'] )
-
+require_relative '../lib/helpers'
 require_relative '../lib/db/cache'
 require_relative '../lib/db/cache_report_parser'
 require_relative '../lib/db/report_repository'
