@@ -39,7 +39,7 @@ class Web < Sinatra::Application
       redirect to "/login"
     else
       session[:email_attempt] = params[:email]
-      flash :error, @user.errors.full_messages.map {|error| "<p>#{error}</p>"}.join
+      flash :error, user.errors.full_messages.map {|error| "<p>#{error}</p>"}.join
       redirect to "/signup"
     end 
   end
