@@ -1,0 +1,83 @@
+script src="https://cdn.paddle.com/paddle/paddle.js"
+javascript:
+  Paddle.Setup({
+    vendor: 37934
+  });  
+section id="account" class="hero"
+  div class="hero-body"
+    div class="container"
+      div class="columns"
+        div class="column is-6"
+          h1 class="title"
+            = @user.email
+          
+          h2 class="subtitle"
+            = @user.status
+
+          div class="mb-3"
+            p class="mb-3"
+              a href="#!" data-email="#{@user.email}" data-passthrough="#{@user.id}" data-product="639997" data-theme="none" data-success="/validate/639997" class="button is-danger paddle_button"Get 12 months access for $15
+           
+          p class="mb-3"
+            a href="/" Go home     
+
+        div class="column is-6"
+
+          div class="mb-3"
+            p Service emails: 
+
+            span class="tag is-info is-light mb-1" 
+              | gamb-sa@gamb-294914.iam.gserviceaccount.com     
+            br        
+            span class="tag is-info is-light mb-1" 
+              | gamb-sa@gamb-294914.iam.gserviceaccount.com
+          p class="mb-3"
+            a href="/download" class="button is-link is-outlined" Download the app    
+      hr
+
+      div class="content"
+        h1 How to setup the app
+        ul
+          li Open the app
+          li 
+            | Click menubar icon and select 
+            b Authenticate
+          li 
+            | Enter 
+            b Email 
+            | and 
+            b Password 
+            | used for 
+            a href="#" gasb.app 
+            | (this site)
+
+        h1 How to start tracking a new view
+        
+        p To start tracking a view you need 2 things: <b>View ID</b> and <b>Service Email</b>.
+
+        ul
+          li Open google analitycs
+          li Select a view
+          li Click <b>Admin</b>
+        
+        h5 To add Service Email
+        ul
+          li Click <b>Account User Management</b>
+          li Click <b>+</b> then <b>Add Users</b>
+          li Add one of the available Service Emails. Keep <b>Read & Analize</b> checkbox selected. Click <b>Add</b>
+          li Add the selected Service Email into the app.
+
+        h5 To obtain View ID
+        ul
+          li Click <b>View Settings</b>
+          li Copy the View ID and add it into the app.       
+
+        
+        p 
+        | Next, in the app, give your view a friendly name and select what kind of reports you're interested in.
+        br
+        | There're 2 rows in menubar. The first row shows the number of currently active users at your view. The second row is the number of users for the last 24 hours.
+          
+
+        
+ 

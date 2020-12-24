@@ -1,15 +1,31 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    activemodel (6.1.0)
+      activesupport (= 6.1.0)
+    activerecord (6.1.0)
+      activemodel (= 6.1.0)
+      activesupport (= 6.1.0)
+    activesupport (6.1.0)
+      concurrent-ruby (~> 1.0, >= 1.0.2)
+      i18n (>= 1.6, < 2)
+      minitest (>= 5.1)
+      tzinfo (~> 2.0)
+      zeitwerk (~> 2.3)
     addressable (2.7.0)
       public_suffix (>= 2.0.2, < 5.0)
+    bcrypt (3.1.16)
+    concurrent-ruby (1.1.7)
     connection_pool (2.2.3)
+    database_cleaner (1.8.5)
     declarative (0.0.20)
     declarative-option (0.1.0)
     diff-lcs (1.4.4)
     faraday (1.1.0)
       multipart-post (>= 1.2, < 3)
       ruby2_keywords
+    figaro (1.2.0)
+      thor (>= 0.14.0, < 2)
     google-api-client (0.49.0)
       addressable (~> 2.5, >= 2.5.1)
       googleauth (~> 0.9)
@@ -27,15 +43,19 @@ GEM
       os (>= 0.9, < 2.0)
       signet (~> 0.14)
     httpclient (2.8.3)
+    i18n (1.8.5)
+      concurrent-ruby (~> 1.0)
     jwt (2.2.2)
     memoist (0.16.2)
     mini_mime (1.0.2)
+    minitest (5.14.2)
     mock_redis (0.26.0)
     multi_json (1.15.0)
     multipart-post (2.1.1)
     mustermann (1.1.1)
       ruby2_keywords (~> 0.0.1)
     os (1.1.1)
+    pg (1.2.3)
     public_suffix (4.0.6)
     rack (2.2.3)
     rack-protection (2.1.0)
@@ -45,6 +65,7 @@ GEM
     rack-throttle (0.7.0)
       bundler (>= 1.0.0)
       rack (>= 1.0.0)
+    rake (13.0.3)
     redis (4.2.2)
     representable (3.0.4)
       declarative (< 0.1.0)
@@ -81,22 +102,42 @@ GEM
       rack (~> 2.2)
       rack-protection (= 2.1.0)
       tilt (~> 2.0)
+    sinatra-activerecord (2.0.21)
+      activerecord (>= 4.1)
+      sinatra (>= 1.0)
+    slim (4.1.0)
+      temple (>= 0.7.6, < 0.9)
+      tilt (>= 2.0.6, < 2.1)
+    temple (0.8.2)
+    thor (1.0.1)
     tilt (2.0.10)
+    tzinfo (2.0.4)
+      concurrent-ruby (~> 1.0)
     uber (0.1.0)
+    zeitwerk (2.4.2)
 
 PLATFORMS
   ruby
 
 DEPENDENCIES
+  activerecord
+  bcrypt
+  database_cleaner
+  figaro
   google-api-client (~> 0.34)
+  jwt
   mock_redis
+  pg
   rack-test
   rack-throttle
+  rake
   redis
   require_all
   rspec
   sidekiq
   sinatra
+  sinatra-activerecord
+  slim
 
 BUNDLED WITH
    2.1.2

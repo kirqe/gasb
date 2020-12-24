@@ -1,0 +1,8 @@
+- @flash = session.delete(:flash)
+- if @flash
+  - @flash.each do |flag, message|
+    - flag = :danger if flag == :error
+    - flag = :info   if flag == :notice
+    div class=["notification cornered", "is-#{flag}", "is-light"].compact.join(' ')
+      button class="delete"
+      == message

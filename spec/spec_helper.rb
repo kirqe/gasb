@@ -1,12 +1,16 @@
 ENV['RACK_ENV'] = 'test'
 
 require './config/environment'
+require 'database_cleaner'
 
 RSpec.configure do |config|
   config.before(:each) do
     $redis.flushall
   end 
 end
+
+
+DatabaseCleaner.strategy = :truncation
 
 RSpec.configure do |config|
 
@@ -19,4 +23,11 @@ RSpec.configure do |config|
   end
 
   config.shared_context_metadata_behavior = :apply_to_host_groups
+
+  config.before(:all) do
+    DatabaseCleaner.clean
+  end
+  config.after(:each) do
+    DatabaseCleaner.clean
+  end  
 end

@@ -1,0 +1,16 @@
+default: &default
+  adapter: postgresql
+  encoding: unicode
+  pool: 5
+
+production:
+  <<: *default
+  database: gasb_prod
+
+development:
+  <<: *default
+  database: gasb_prod
+
+test:
+  <<: *default
+  database: gasb_prod
