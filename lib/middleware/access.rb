@@ -2,7 +2,7 @@ class Access
   def initialize(app)
     @app = app
     @scopes = [
-      { route: "/status/:term", reg: /status\/(now|day|week|month):([0-9]+)/ }
+      { route: "/api/status/:term", reg: /api\/status\/(now|day|week|month):([0-9]+)/ }
     ]
   end
 

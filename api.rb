@@ -49,4 +49,15 @@ class Api < Sinatra::Application
       email: user.email
     }
   end
+
+  def valid_params(params)
+    valid_term = /(now|day|week|month):([0-9]+)/
+    
+    params[:term].match?(valid_term) && 
+    service_account_emails.include?(params[:e])
+  end
+
+  def service_account_emails
+    Dir["./keys/*.json"].map { |e| e.match(/keys\/(.*).json/,1)[1] }
+  end
 end
