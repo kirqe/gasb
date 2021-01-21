@@ -11,7 +11,12 @@
 
 
 # todo
+<<<<<<< HEAD
 
+=======
+reset token/form
+email notifications
+>>>>>>> a7038da24864d65fe8bb9822e20dd5cf28756737
 privacy/terms
 
 
