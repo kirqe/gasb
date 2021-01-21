@@ -2,7 +2,7 @@ class Report
   include Helpers
 
   attr_reader :term, :ref, :id
-  attr_accessor :update_interval, :service, :value, :updated_at
+  attr_accessor :update_interval, :service, :value, :updated_at, :queued
 
   @report_refs = []
 
@@ -25,19 +25,21 @@ class Report
   def initialize(term, args={})
     @term = term
     @value = args[:value] || 0
-    @updated_at = args[:updated_at] || Time.now
+    @updated_at = args[:updated_at] || (Time.now - (60 * 60 * 24))
     @update_interval ||= 30 * 60
+    @queued = (args[:queued] == "true" ? true : false) || false
   end
 
   def can_be_updated? #stale?
-    Time.now > (@updated_at + @update_interval)
+    (Time.now > (@updated_at + @update_interval)) && !queued
   end
 
   def to_h
     {
       term: @term,
       value: @value,
-      updated_at: @updated_at
+      updated_at: @updated_at,
+      queued: @queued
     }
   end
 

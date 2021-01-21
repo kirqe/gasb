@@ -1,18 +1,20 @@
 class Web < Sinatra::Application
+  include Token
+  include Paddle
+  
   configure do
-    enable :sessions
     set :views, 'views'
     set :public_folder, 'public'
   end
 
   get "/" do
     redirect to "/account" if logged_in?
-    slim :index
+    slim :index, layout: :'layouts/default'
   end
 
   get "/login" do
     redirect to "/account" if logged_in?
-    slim :'auth/login'    
+    slim :'auth/login', layout: :'layouts/default'
   end
 
   post "/login" do
@@ -25,11 +27,17 @@ class Web < Sinatra::Application
       flash :error, "Invalid email or password"      
       redirect to "/login"
     end
+  end
+
+  post "/logout" do
+    session[:user_id] = nil
+    flash :success, "Logged out successfully"
+    redirect to "/login"              
   end  
 
   get "/signup" do
     redirect to "/account" if logged_in?
-    slim :'auth/signup'
+    slim :'auth/signup', layout: :'layouts/default'
   end
 
   post "/signup" do
@@ -44,38 +52,117 @@ class Web < Sinatra::Application
     end 
   end
 
+  get "/reset" do
+    slim :'auth/reset', layout: :'layouts/default'
+  end
+
+  post "/reset" do
+    email = params[:email]
+    if email
+      MailWorker.perform_async(email, "password_reset")
+    end
+
+    flash :success, "A reset password link has been sent to your email. Follow the link to restore access to your account"
+    redirect to "/login"      
+  end    
+
   get "/account" do
-    if logged_in?
-      @user = current_user
-      slim :account    
-    else
-      flash :error, "Please login"
-      redirect to "/login"
+    reset_token = params[:reset_token]
+    if reset_token
+      user = User.find_by(reset_token: reset_token)
+      if user
+        session[:from_token] = true
+        session[:user_id] = user.id
+        user.refresh_reset_token()
+        flash :success, "Successfully logged in. Go ahead and update your password"
+        redirect to "/account"
+      else
+        flash :error, "Invalid reset link"
+        redirect to "/account"
+      end    
+    end
+
+    proceed_if_authenticated do
+      slim :'account/account', layout: :'layouts/dash'
+    end    
+  end
+
+  post "/account" do
+    password              = params[:password]
+    password_confirmation = params[:password_confirmation]
+    old_password          = params[:old_password]
+    reset_token           = params[:reset_token]
+
+    # account has been updated and user is supposed to know the old passowrd now
+    session[:from_token] = false 
+
+    proceed_if_authenticated do
+      if password == password_confirmation
+        @user.password = password
+        if @user.save
+          flash :success, "You have successfully updated your password"
+          redirect to "/account"
+        else
+          flash :error, @user.errors.full_messages.map {|error| "<p>#{error}</p>"}.join
+          redirect to "/account"
+        end
+      else
+        flash :error, "Passwords do not match"
+        redirect to "/account"
+      end
+    end
+  end    
+
+  get "/instructions" do
+    proceed_if_authenticated do
+      slim :'account/instructions', layout: :'layouts/dash'
+    end    
+  end
+
+  get "/subscription" do
+    proceed_if_authenticated do
+      @title = "subscription"
+      @plans = Plan.all
+      @subscription = @user.subscription
+
+      slim :'account/subscription', layout: :'layouts/dash'
     end
   end
 
-  get "/validate/:plan_id" do
-    if logged_in?
-      plan_id = params[:plan_id]
-      user = current_user
-
-      if Subscription.validate(plan_id, user)
-        flash :success, "You have successfully activated the subscription. Check the instructions on how to proceed further."
-        redirect to "/account"
-      else
-        flash :error, "Something went wrong"
-        redirect to "/account"
-      end
-    else
-      flash :error, "Please login"
-      redirect to "/login"
+  get "/subscribed" do
+    proceed_if_authenticated do
+      flash :success, "You have successfully activated subscription. Check the instructions on how to proceed further"
+      redirect to "/account"
     end
   end
 
   get "/download" do
-    flash :error, "Please login"
-    redirect to "/login" unless logged_in?
-    send_file File.join(settings.public_folder, 'app/gasb.dmg')
+    proceed_if_authenticated do
+      send_file File.join(settings.public_folder, 'app/gasb.dmg')
+    end
+  end
+
+  post "/paddle" do
+    react_to_hook(params)
+  end
+
+  get "/terms" do
+    slim :'static/terms', layout: :'layouts/default'
+  end
+
+  get "/privacy" do
+    slim :'static/privacy', layout: :'layouts/default'
+  end
+
+  def proceed_if_authenticated
+    if logged_in?
+      @user = current_user
+      yield
+
+    else
+      flash :error, "Please login"
+      redirect to "/login"
+    end    
   end
 
   helpers do
@@ -94,7 +181,6 @@ class Web < Sinatra::Application
 
     def flash(key, value)
       session[:flash] = { key => value }
-    end    
-  end  
+    end
+  end
 end
-

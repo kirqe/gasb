@@ -1,5 +1,6 @@
 .DS_Store
 dump.rdb
 keys/*.json
+keys/*.key
 config/application.yml
 node_modules
