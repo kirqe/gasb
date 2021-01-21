@@ -10157,33 +10157,7 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
   color: #fff;
 }
 
-.mySection {
-  color: white;
-  border: 1px solid white;
-}
-
-.myHero {
-  padding: 50px 0 50px 75px;
-}
-
-.myHero .hr {
-  display: inline-block;
-  width: 100px;
-  height: 15px;
-  background: white;
-  border-radius: 20px;
-  margin-bottom: 15px;
-}
-
-.myHero h1 {
-  font-size: 50px;
-}
-
 @media (max-width: 768px) {
-  .myHero {
-    padding: 50px !important;
-  }
-
   .reverse-columns {
     flex-direction: column-reverse;
     display: flex;
@@ -10205,14 +10179,13 @@ a.has-text-danger-dark:hover, a.has-text-danger-dark:focus {
     justify-content: center;
     display: flex;
   }
-
   .logo-column .logo {
     width: 70%;
     padding: 50px 0;
   }
 }
 span[data-tooltip] {
-  border-bottom: 2px dashed #ffa100 !important;
+  border-bottom: 2px dashed #fff !important;
 }
 
 .tabs li:first-child a {
@@ -10222,11 +10195,110 @@ span[data-tooltip] {
 .notification {
   display: block;
 }
-
 .notification.cornered {
   position: absolute;
   top: 20px;
   right: 20px;
+}
+
+ul.footer-creds {
+  display: inline-flex;
+}
+
+#footer.fixed {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+}
+
+.plans {
+  display: flex;
+  flex-flow: row wrap;
+}
+@media screen and (max-width: 1023px) {
+  .plans {
+    flex-direction: column-reverse;
+  }
+}
+
+.plan {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  background-color: #fff;
+  border: 0.2rem solid #f5f5f5;
+  border-radius: 4px;
+  list-style-type: none;
+  transition: 0.25s;
+  margin: 0.5em;
+}
+@media screen and (max-width: 1023px) {
+  .plan {
+    margin: 0.5em 0;
+  }
+}
+
+.plan:first-child {
+  margin-left: 0;
+}
+
+.plan-header {
+  border-top-left-radius: 4px;
+  border-top-right-radius: 4px;
+  background-color: #fff;
+  color: #4a4a4a;
+  font-size: 1.25rem;
+  font-weight: 600;
+  padding: 0.75em;
+  align-content: center;
+  text-align: center;
+}
+
+.plan-price {
+  background-color: #fff;
+  color: #4a4a4a;
+  font-size: 0.75rem;
+  font-weight: 400;
+  padding: 0.75em;
+  align-content: center;
+  text-align: center;
+}
+
+.plan-price-amount {
+  font-size: 2.5rem;
+  font-weight: 700;
+}
+
+.plan-price-currency {
+  vertical-align: super;
+  font-size: 1rem !important;
+  font-weight: 400 !important;
+  color: #4a4a4a;
+  margin-right: 0.25rem;
+}
+
+.plan-footer {
+  border-bottom-left-radius: 4px;
+  border-bottom-right-radius: 4px;
+  padding: 0.75em;
+  align-content: center;
+  text-align: center;
+  margin-top: auto;
+}
+
+.plan-note {
+  font-size: 0.7rem;
+  text-align: center;
+  color: #b5b5b5;
+}
+
+.faded {
+  opacity: 0.5;
+}
+
+.tag.selected-plan {
+  display: flex;
+  height: 40px;
 }
 /*! @creativebulma/bulma-tooltip v1.2.0 | (c) 2020 Gaetan | MIT License | https://github.com/CreativeBulma/bulma-tooltip */
 @-webkit-keyframes spinAround {
