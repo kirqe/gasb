@@ -6,7 +6,9 @@ html
     title GASB app
     link href="./assets/build/main.css" rel="stylesheet"
   body
-    == slim :notification
+    == slim :'shared/notification'
     == yield
+
+    == slim :'shared/footer'
 
   script src="./assets/build/bundle.js"

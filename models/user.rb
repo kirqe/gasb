@@ -1,7 +1,10 @@
 class User < ActiveRecord::Base
+  has_one :subscription
+  has_one :plan, through: :subscription
+
   has_secure_password
-  before_create :pause
   before_save { self.email = email.downcase }
+  before_create :generate_reset_token
 
   EMAIL_REGEX = /\A[\w+\-.]+@[a-z\d\-]+(\.[a-z\d\-]+)*\.[a-z]+\z/i
   validates :email,
@@ -14,15 +17,19 @@ class User < ActiveRecord::Base
     length: { minimum: 6, maximum: 20 },
     allow_nil: true
 
-  def active?
-    self.status == "active"
+  def has_subscription?
+    !subscription.nil?
   end
 
-  def activate
-    self.status = "active"    
+  def refresh_reset_token
+    generate_reset_token()
+    save()
   end
 
-  def pause
-    self.status = "inactive"   
+  def generate_reset_token
+    self.reset_token = loop do
+      reset_token = SecureRandom.urlsafe_base64(64, false)
+      break reset_token unless User.exists?(reset_token: reset_token)
+    end
   end
 end

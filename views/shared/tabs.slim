@@ -1,0 +1,11 @@
+div class="container"
+  div class="columns"
+    div class="column"      
+      div class="tabs is-large"
+        ul
+          li class=("is-active" if env["PATH_INFO"] == "/subscription")
+            a href="/subscription" Subscription         
+          li class=("is-active" if env["PATH_INFO"] == "/instructions")
+            a href="/instructions" Instructions
+          li class=("is-active" if env["PATH_INFO"] == "/account")
+            a href="/account" Account            

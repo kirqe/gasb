@@ -1,0 +1,41 @@
+section id="account"
+  div class="container"
+    div class="columns"
+      div class="column is-5-desktop is-5-widescreen is-12-tablet"
+        form action="/account"  method="POST"
+        
+          div class="field"
+            label for="" class="label" Email
+            div class="control has-icons-left"
+              input name="email" type="email" placeholder="e.g. bobsmith@gmail.com" class="input" required="true" value="#{@user.email}" disabled="disabled"          
+              span class="icon is-small is-left"
+                i class="fas fa-envelope"
+
+          div class="field"
+            label for="" class="label" New Password
+            div class="control has-icons-left"
+              input name="password" type="password" placeholder="*******" class="input" required="true"
+              span class="icon is-small is-left"
+                i class="fas fa-lock"
+
+          div class="field"
+            label for="" class="label" New Password Confirmation
+            div class="control has-icons-left"
+              input name="password_confirmation" type="password" placeholder="*******" class="input" required="true"
+              span class="icon is-small is-left"
+                i class="fas fa-lock"
+
+          - unless session[:from_token]
+            div class="field"
+              label for="" class="label" Old Password
+              div class="control has-icons-left"
+                input name="old_password" type="password" placeholder="*******" class="input" required="true"
+                span class="icon is-small is-left"
+                  i class="fas fa-lock"                  
+
+          div class="field"
+            button class="button" Submit     
+
+    == slim :'shared/help'            
+
+  

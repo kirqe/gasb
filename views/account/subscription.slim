@@ -1,0 +1,47 @@
+script src="https://cdn.paddle.com/paddle/paddle.js"
+
+section id="subscription" data-vendor="#{ENV['paddle_vendor_id']}"
+  div class="columns"
+    div class="column" 
+      div class="plans"
+        - @plans.each do |plan|
+          - should_be_faded = @subscription && !@subscription.is_cancelled? && plan != @user.plan
+          div class=(["plan", ("faded" if should_be_faded)].compact.join(' ')) 
+            div class="plan-header" = plan.name
+            div class="plan-price" 
+              span class="plan-price-amount" 
+                span class="plan-price-currency" $
+                = plan.price
+              | /#{plan.per}
+            div class="plan-note" = plan.note
+            div class="plan-footer"            
+              - if plan == @user.plan && !@subscription.is_cancelled?
+                span class="tag is-info is-light selected-plan"
+                    b class="mr-1" selected plan                         
+              - else
+                a { href="#!" class=(["button", "is-fullwidth", ("is-danger" if plan.featured), ("paddle_button" if @subscription && @subscription.is_cancelled? || @subscription.nil? && plan != @user.plan)].compact.join(' '))
+                disabled=(!@subscription.nil? && !@subscription.is_cancelled?)
+                data-email="#{@user.email}" 
+                data-passthrough="#{@user.id}" 
+                data-product="#{plan.paddle_product_id}" 
+                data-theme="none" 
+                data-success="/subscribed" } Choose
+
+  - if @subscription
+    - if @subscription.is_cancelled? && @subscription.is_active? # already cancelled but still active
+      p class="is-size-7"
+        | You have successfully cancelled the subscription. It's still availavle till  #{Time.at(@subscription.expires_at).strftime("%d.%m.%Y-%H:%M:%S %z")}
+    - elsif @subscription.is_active? # active and not cancelled
+      p class="is-size-7"
+        a href="#{@user.subscription.cancel_url}" Cancel subscription.
+    - elsif @subscription.is_paused # paused but not cancelled
+      p class="is-size-7"
+        | Your subscription was paused due to multiple failed attempts of payment.
+        a< href="#{@user.subscription.cancel_url}" Cancel subscription.
+                  
+  == slim :'shared/help'
+
+  javascript:
+    Paddle.Setup({
+      vendor: parseInt(document.getElementById("subscription").dataset.vendor)
+    });

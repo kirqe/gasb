@@ -1,0 +1,21 @@
+doctype html
+html
+  head
+    meta charset="utf-8" /
+    meta content="width=device-width, initial-scale=1" name="viewport" 
+    title = ENV['name']
+    link href="./assets/build/main.css" rel="stylesheet"
+  body
+    == slim :'shared/notification'     
+    div class="section"
+      div class="container"
+        div class="box"
+          = current_user.inspect
+          hr
+          = current_user.subscription.inspect
+          hr
+          = current_user.plan.inspect      
+        == slim :'shared/tabs'        
+        == yield
+
+  script src="./assets/build/bundle.js"

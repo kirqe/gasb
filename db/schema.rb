@@ -10,17 +10,33 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_12_21_224600) do
+ActiveRecord::Schema.define(version: 2021_01_16_175336) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
 
+  create_table "plans", force: :cascade do |t|
+    t.string "name"
+    t.string "note"
+    t.string "per"
+    t.decimal "price"
+    t.integer "paddle_product_id"
+    t.boolean "featured"
+  end
+
+  create_table "subscriptions", force: :cascade do |t|
+    t.integer "user_id"
+    t.integer "plan_id"
+    t.string "refresh_token"
+    t.integer "expires_at"
+    t.string "cancel_url"
+    t.boolean "is_paused", default: false
+  end
+
   create_table "users", force: :cascade do |t|
     t.string "email"
-    t.string "status"
-    t.string "access_code"
-    t.date "expires_at"
     t.string "password_digest"
+    t.string "reset_token"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end

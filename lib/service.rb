@@ -1,5 +1,6 @@
 class Service
   include Helpers
+
   @service_classes = []
 
   class << self
@@ -24,7 +25,23 @@ class Service
   def self.call(term, account)
     service = service_for(term, account)
     return nil unless service
-    service.call
+
+    # https://developers.google.com/analytics/devguides/config/mgmt/v3/errors#backoff  
+    value = 0
+    for n in (0..5)      
+      begin
+        value = service.call
+        p "--N: #{n}, --S: #{service}, --V: #{value}"
+        return value
+      rescue Google::Apis::RateLimitError => e
+        p "rate error #{e}"
+        sleep((2 ** n) + rand)
+      rescue => e
+        p "some error #{e.class}"
+        break
+      end
+    end
+    value
   end
 
   def initialize(term, account, args={})

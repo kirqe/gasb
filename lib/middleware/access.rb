@@ -2,39 +2,42 @@ class Access
   def initialize(app)
     @app = app
     @scopes = [
-      { route: "/api/status/:term", reg: /api\/status\/(now|day|week|month):([0-9]+)/ }
+      { route: "/status/:term", reg: /status\/(now|day|week|month):([0-9]+)/ }
     ]
   end
 
   def call(env)
-    scope = @scopes.find { |scope| env['PATH_INFO'] =~ scope[:reg] }
-    scope ? validate(env) : @app.call(env)
+    scope = @scopes.find { |scope| env['PATH_INFO'].match?(scope[:reg]) }
+    scope.nil? ? @app.call(env) : validate(env)
   end
 
   def validate(env)
     begin
-      hmac_secret = ENV['JWT_SECRET']
-      
+      hmac_secret = ENV['jwt_secret']
+
       options = { 
         algorithm: 'HS256', 
-        iss: ENV['JWT_ISSUER'],
+        iss: ENV['jwt_issuer'],
         verify_iss: true
       }
 
       bearer = env.fetch('HTTP_AUTHORIZATION', '').slice(7..-1)
       data, header = JWT.decode bearer, hmac_secret, true, options
+      data = data.symbolize_keys
 
       env[:email] = data[:email]
+
+
       @app.call(env)
-    
+
     rescue JWT::ExpiredSignature
-      [403, { 'Content-Type' => 'text/plain' }, ['The token has expired.']] 
+      [403, { 'Content-Type' => 'application/json' }, [ { message: 'Еxpired token' }.to_json ]] 
     rescue JWT::InvalidIssuerError
-      [403, { 'Content-Type' => 'text/plain' }, ['The token does not have a valid issuer.']]           
+      [403, { 'Content-Type' => 'application/json' }, [ { message: 'Invalid issuer' }.to_json ]]           
     rescue JWT::InvalidIatError
-      [403, { 'Content-Type' => 'text/plain' }, ['The token does not have a valid "issued at" time.']]         
+      [403, { 'Content-Type' => 'application/json' }, [ { message: 'Invalid iat' }.to_json ]]         
     rescue JWT::DecodeError
-      [401, { 'Content-Type' => 'text/plain' }, ['A token must be passed.']]    
+      [401, { 'Content-Type' => 'application/json' }, [ { message: 'Missing token' }.to_json ]]    
     end
   end
 end

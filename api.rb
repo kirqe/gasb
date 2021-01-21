@@ -1,21 +1,19 @@
 class Api < Sinatra::Application
+  include Token
   use Access
-
-  # API
+  
+  # /api/status/now:193451539
   get "/status/:term" do
-    if valid_params(params)
-      term = params[:term]
-      email = params[:e]   
+    term = params[:term]
 
+    if valid(term)
       repo = ReportRepository.new(parser: CacheReportParser)
-      report = repo.find_of_ref(term)
 
-      if report
-        if report.can_be_updated?
-          RequestWorker.perform_async(term, email)
-        end
-      else
-        report = repo.create(term)
+      report = repo.find_of_ref(term) # :now :day :week :month
+      report = repo.create(term) unless report
+
+      if report.can_be_updated?
+        RequestWorker.perform_async(term)
       end
       
       report.to_json
@@ -24,40 +22,56 @@ class Api < Sinatra::Application
     end
   end
 
-  # token for the app
+  # /api/auth token for the app
   post "/auth" do
-    # if user can login from here, it means they're subscribed
-    params = JSON.parse(request.body.read).symbolize_keys
+    params        = JSON.parse(request.body.read).symbolize_keys
+    email         = params[:email]
+    password      = params[:password]
+    refresh_token = params[:rt]    
 
-    user = User.find_by(email: params[:email])
-    if user && user.authenticate(params[:password]) && user.active?
-      { token: token(user) }.to_json   
-    else      
-      { error: "wrong email/password or subscription is expired" }.to_json
+    if email && password
+      proceed_with_password(email, password)      
+    elsif refresh_token
+      proceed_with_refresh_token(refresh_token)
     end
   end
 
-  def token(user)
-    JWT.encode data(user), ENV['jwt_secret'], 'HS256'
-  end
+  private
+    def proceed_with_password(email, password)
+      user = User.find_by(email: email)
 
-  def data(user)
-    { 
-      exp: Time.now.to_i + 60 * 60 * 24 * 365, # 12 months
-      iat: Time.now.to_i,
-      iss: ENV['jwt_issuer'],
-      email: user.email
-    }
-  end
+      if user && user.authenticate(password)
+        subscription = user.subscription
 
-  def valid_params(params)
-    valid_term = /(now|day|week|month):([0-9]+)/
-    
-    params[:term].match?(valid_term) && 
-    service_account_emails.include?(params[:e])
-  end
+        if subscription && subscription.is_active?
+          h(user) 
+        else
+          {
+            message: "No subscription or subscription is expired"
+          }.to_json
+        end
+      end    
+    end
 
-  def service_account_emails
-    Dir["./keys/*.json"].map { |e| e.match(/keys\/(.*).json/,1)[1] }
-  end
+    def proceed_with_refresh_token(refresh_token)
+      subscription = Subscription.find_by(refresh_token: refresh_token)
+
+      if subscription && subscription.is_active?
+        decode_and_proceed(refresh_token) do
+          h(subscription.user)
+        end      
+      end
+    end
+
+    def h(user)
+      { 
+        token: access_token(user),
+        refreshToken: user.subscription.refresh_token,
+        expiresIn: 20 # 60 * 15
+      }.to_json
+    end
+
+    def valid(term)
+      term && term.match?(/(now|day|week|month):([0-9]+)/)
+    end
 end

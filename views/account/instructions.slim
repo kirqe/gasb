@@ -1,0 +1,55 @@
+
+section id="instructions"
+  div class="columns"
+    div class="column"
+      div class="content"        
+        h1 Start using the app
+        ul
+          li
+            a> href="/download" target="_blank" Download the app
+            p class="is-size-7"
+              | macOS 10.12.6 or later
+          li Drag the app file into Applications folder and open
+          li 
+            | Click menubar icon and select 
+            b Authenticate
+          li 
+            | Enter 
+            b Email 
+            | and 
+            b Password 
+            | used for this site
+
+        h1 How to start tracking a new view
+        
+        p There're 2 things required to start tracking a view: <b>View ID</b> and <b>Service Email</b>.
+
+        ul
+          li Open google analitycs
+          li Select a view
+          li Click <b>Admin</b>
+        
+        h5 To add Service Email
+        ul
+          li Select <b>Account User Management</b>
+          li Click <b>+</b> then <b>Add Users</b>
+          li 
+            | Enter the following Service Email:
+
+            span class="tag is-info is-light mb-1" 
+              b = ENV['service_account']
+            br                                   
+            | Keep <b>Read & Analize</b> checkbox selected and click <b>Add</b>
+
+        h5 To obtain View ID
+        ul
+          li Click <b>View Settings</b>
+          li Copy the <b>View ID</b> and add it into the app.       
+
+        p 
+        | Next, in the app, give your view a friendly name and select what kind of reports you're interested in.
+        br
+        | There're 2 rows in menubar. The first row shows the number of currently active users at your view. The second row shows the number of users for the last 24 hours.
+          
+
+  == slim :'shared/help'
