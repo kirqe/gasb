@@ -154,6 +154,14 @@ class Web < Sinatra::Application
     slim :'static/privacy', layout: :'layouts/default'
   end
 
+  get "/disclaimer" do
+    slim :'static/disclaimer', layout: :'layouts/default'
+  end
+  
+  get "/eula" do
+    slim :'static/eula', layout: :'layouts/default'
+  end
+
   def proceed_if_authenticated
     if logged_in?
       @user = current_user
