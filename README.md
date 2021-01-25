@@ -1,7 +1,5 @@
 # gasb api
 
-
-
 ```
 # /status/month:11111111?e=gasb-sa@gasb-1234123.iam.gserviceaccount.com
 
