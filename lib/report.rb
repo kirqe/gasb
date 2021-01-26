@@ -1,22 +1,19 @@
 class Report
-  include Helpers
-
   attr_reader :term, :ref, :id
   attr_accessor :update_interval, :service, :value, :updated_at, :queued
 
-  @report_refs = []
+  @refs = []
 
   class << self
-    attr_reader :report_refs
+    attr_reader :refs
   end
 
   def self.inherited(klass)
-    Report.report_refs << klass
+    Report.refs << klass
   end
 
-  def self.new_of_ref(term, args={})
-    ref = ref_id(term).first
-    report = Report.report_refs.find {|r| r.refs.include?(ref) }
+  def self.new_as(term, args={})
+    report = Report.refs.find {|r| r.refs.include?(args[:as]) }
 
     return report.new(term, args) if report
     nil
