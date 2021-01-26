@@ -1,0 +1,6 @@
+:queues:
+  - [default, 1]
+  - [status, 1]
+  - [mailers, 2]
+
+# sidekiq_options queue: 'critical'

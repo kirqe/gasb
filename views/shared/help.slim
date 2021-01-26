@@ -1,12 +1,10 @@
-- se = ENV['support_email']
+- se = ENV['SUPPORT_EMAIL']
 - if se && !se.empty?
   p class="is-size-7" 
     | Have questions or need help? Address everything to
-    a< href="mailto: #{ENV['support_email']}" = ENV['support_email']
+    a< href="mailto: #{ENV['SUPPORT_EMAIL']}" = ENV['SUPPORT_EMAIL']
     br
     a> href="/download" target="_blank" Download the app
     | macOS 10.12.6 or later
-    / br
-    / a> href="/terms" class="has-text-grey-light" target="_blank" Terms
-    / a> href="/privacy" class="has-text-grey-light" target="_blank" Privacy
-                  
+    br
+    a href="/logout" class="has-text-grey-light" data-method="post" Log out

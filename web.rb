@@ -5,6 +5,7 @@ class Web < Sinatra::Application
   configure do
     set :views, 'views'
     set :public_folder, 'public'
+    set :method_override, true
   end
 
   get "/" do
@@ -59,7 +60,7 @@ class Web < Sinatra::Application
   post "/reset" do
     email = params[:email]
     if email
-      MailWorker.perform_async(email, "password_reset")
+      MailWorker.perform_async(email, "password_reset") unless User.find_by(email: email).nil?
     end
 
     flash :success, "A reset password link has been sent to your email. Follow the link to restore access to your account"
@@ -111,7 +112,16 @@ class Web < Sinatra::Application
         redirect to "/account"
       end
     end
-  end    
+  end
+
+  delete '/account' do
+    proceed_if_authenticated do
+      @user.destroy
+      logout
+      flash :success, "You have successfully deletet your account"
+      redirect to "/"
+    end
+  end
 
   get "/instructions" do
     proceed_if_authenticated do

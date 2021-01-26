@@ -1,5 +1,5 @@
 class User < ActiveRecord::Base
-  has_one :subscription
+  has_one :subscription, dependent: :destroy
   has_one :plan, through: :subscription
 
   has_secure_password

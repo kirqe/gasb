@@ -10,13 +10,14 @@ module Paddle
       subscription_id       = params[:subscription_id]
       subscription_plan_id  = params[:subscription_plan_id] # plan_id
       cancel_url            = params[:cancel_url]
+      update_url            = params[:update_url] # update payment details
       cancellation_ef_date  = params[:cancellation_effective_date] # subscription should work till this date
       attempt_number        = params[:attempt_number] # retry payment count
       
       user = User.find_by(email: email)
       plan = Plan.find_by(paddle_product_id: subscription_plan_id)
       subscription = user.subscription
-      
+
       case alert_name
       when "subscription_created"
         refresh_token = refresh_token(user, next_bill_date, subscription_id, subscription_plan_id)
@@ -26,17 +27,27 @@ module Paddle
           subscription.update!(plan: plan, 
                               refresh_token: refresh_token, 
                               expires_at: till, 
-                              cancel_url: cancel_url)
+                              cancel_url: cancel_url,
+                              update_url: update_url)
         else
           Subscription.create(user: user, 
                               plan: plan, 
                               refresh_token: refresh_token, 
                               expires_at: till, 
-                              cancel_url: cancel_url)          
-        end
-        
-      # when "subscription_updated"
-        # user has to cancel subscription first to change plan so we don't use this hook
+                              cancel_url: cancel_url,
+                              update_url: update_url)          
+        end        
+      when "subscription_updated"
+        # user has to cancel subscription first to change plan
+        # but it works to update payment details
+        if status == "active"
+          if subscription && !subscription.is_cancelled?
+            refresh_token = 
+              refresh_token(user, next_bill_date, subscription_id, subscription_plan_id)
+            till = Time.parse(next_bill_date).to_i
+            subscription.renew(refresh_token, till)
+          end           
+        end    
       when "subscription_cancelled"
         if subscription && subscription.is_paused
           subscription.destroy()

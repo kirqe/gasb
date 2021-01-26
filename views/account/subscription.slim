@@ -1,6 +1,6 @@
 script src="https://cdn.paddle.com/paddle/paddle.js"
 
-section id="subscription" data-vendor="#{ENV['paddle_vendor_id']}"
+section id="subscription" data-vendor="#{ENV['PADDLE_VENDOR_ID']}"
   div class="columns"
     div class="column" 
       div class="plans"
@@ -30,14 +30,15 @@ section id="subscription" data-vendor="#{ENV['paddle_vendor_id']}"
   - if @subscription
     - if @subscription.is_cancelled? && @subscription.is_active? # already cancelled but still active
       p class="is-size-7"
-        | You have successfully cancelled the subscription. It's still availavle till  #{Time.at(@subscription.expires_at).strftime("%d.%m.%Y-%H:%M:%S %z")}
+        | You have successfully cancelled your subscription. It's still availavle till  #{Time.at(@subscription.expires_at).strftime("%d.%m.%Y-%H:%M:%S %z")}
     - elsif @subscription.is_active? # active and not cancelled
       p class="is-size-7"
         a href="#{@user.subscription.cancel_url}" Cancel subscription.
     - elsif @subscription.is_paused # paused but not cancelled
       p class="is-size-7"
         | Your subscription was paused due to multiple failed attempts of payment.
-        a< href="#{@user.subscription.cancel_url}" Cancel subscription.
+        a< href="#{@user.subscription.cancel_url}" Cancel subscription.              
+        a< href="#{@user.subscription.update_url}" Update payment details.
                   
   == slim :'shared/help'
 

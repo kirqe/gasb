@@ -2,18 +2,19 @@ class Api < Sinatra::Application
   include Token
   use Access
   
-  # /api/status/now:193451539
+  # /api/status/now:193451539:sessions
   get "/status/:term" do
-    term = params[:term]
+    term = Term.new(params[:term])
+    quota_user = env[:email]
 
-    if valid(term)
+    if term.is_valid?
       repo = ReportRepository.new(parser: CacheReportParser)
 
-      report = repo.find_of_ref(term) # :now :day :week :month
-      report = repo.create(term) unless report
+      report = repo.find(term.rawString, as: term.ref) # :now :day :week :month
+      report = repo.create(term.rawString) unless report
 
       if report.can_be_updated?
-        RequestWorker.perform_async(term)
+        RequestWorker.perform_async(term.rawString, quota_user)
       end
       
       report.to_json
@@ -28,7 +29,7 @@ class Api < Sinatra::Application
     email         = params[:email]
     password      = params[:password]
     refresh_token = params[:rt]    
-
+    
     if email && password
       proceed_with_password(email, password)      
     elsif refresh_token
@@ -50,6 +51,10 @@ class Api < Sinatra::Application
             message: "No subscription or subscription is expired"
           }.to_json
         end
+      else
+        {
+          message: "Invalid email or password"
+        }.to_json
       end    
     end
 
@@ -67,11 +72,7 @@ class Api < Sinatra::Application
       { 
         token: access_token(user),
         refreshToken: user.subscription.refresh_token,
-        expiresIn: 20 # 60 * 15
+        expiresIn: ENV['JWT_TTL'].to_i
       }.to_json
-    end
-
-    def valid(term)
-      term && term.match?(/(now|day|week|month):([0-9]+)/)
     end
 end

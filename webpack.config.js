@@ -30,6 +30,6 @@ module.exports = {
       },
     ]
   },
-  plugins: [new MiniCssExtractPlugin()],
+  plugins: [new MiniCssExtractPlugin(),new webpack.ProvidePlugin({$: "jquery", jQuery: "jquery"})],
   mode: 'development'
 }

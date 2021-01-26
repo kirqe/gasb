@@ -1,16 +1,24 @@
 default: &default
   adapter: postgresql
   encoding: unicode
+  host: db
   pool: 5
 
 production:
   <<: *default
   database: gasb_prod
-
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  
 development:
   <<: *default
-  database: gasb_prod
+  database: gasb_dev
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
 
 test:
   <<: *default
-  database: gasb_prod
+  database: gasb_test
+  username: <%= ENV['DB_USER'] %>
+  password: <%= ENV['DB_PASSWORD'] %>
+  

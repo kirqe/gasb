@@ -1,4 +1,3 @@
-# https://guides.hanamirb.org/repositories/overview/
 class ReportRepository
   def initialize(args={})
     @parser = args[:parser]
@@ -17,23 +16,21 @@ class ReportRepository
     Report.new(id, new_data)
   end  
 
-  def find(id)
+  def find(id, args={})
     report = nil
     if Cache.exists?(id)
       data = parsed_hash(id)
-      report = Report.new(id, data)
+      
+      if args[:as]
+        data.merge!(args)
+        report = Report.new_as(id, data)
+      else
+        report = Report.new(id, data)
+      end
+      
     end
     report
-  end  
-
-  def find_of_ref(id)
-    report = nil
-    if Cache.exists?(id)
-      data = parsed_hash(id)
-      report = Report.new_of_ref(id, data)
-    end
-    report
-  end    
+  end
 
   def delete(id)
     Cache.delete(id)

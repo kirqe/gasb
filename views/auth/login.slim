@@ -3,7 +3,7 @@ section id="login" class="hero is-b is-fullheight"
     div class="container"
       div class="columns is-centered"
         div class="column is-5-tablet is-4-desktop is-3-widescreen"
-          form action="/login" class="box" method="POST"
+          form action="/login" class="box recaptcha-form" method="POST"
             div class="field"
               label for="" class="label" Email
               div class="control has-icons-left"
@@ -19,7 +19,7 @@ section id="login" class="hero is-b is-fullheight"
                   i class="fas fa-lock"
 
             div class="field"
-              button class="button is-yellow" Login
+              button class="button is-yellow g-recaptcha" data-sitekey="#{ENV['G_CAPT_KEY']}" data-callback='onSubmit' data-action='submit' Login
 
           div class="has-text-centered"
             a href="/signup" Don't have an account?

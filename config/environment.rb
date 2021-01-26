@@ -3,7 +3,7 @@ Bundler.require # requires everything from Gemfile
 
 require 'time'
 require 'sidekiq/web'
-require 'google/apis/analytics_v3'
+require 'google-apis-analytics_v3'
 require 'rack/throttle'
 require 'mock_redis'
 
@@ -13,15 +13,14 @@ require 'openssl'
 
 require 'figaro/sinatra'
 
-
 if ENV['RACK_ENV'] == 'test'
   $redis = MockRedis.new
 else
-  $redis = Redis.new( url: ENV['redis_url'] )
+  $redis = Redis.new( url: ENV['REDIS_URL'] )
 end
 
 require_relative '../lib/middleware/access'
-require_relative '../lib/helpers'
+require_relative '../lib/term'
 require_relative '../models/subscription'
 require_relative '../models/plan'
 require_relative '../models/user'

@@ -1,0 +1,37 @@
+head
+  meta charset="utf-8" /
+  meta content="width=device-width, initial-scale=1" name="viewport" 
+  title = ENV['NAME']
+  link href="/assets/build/main.css" rel="stylesheet"
+
+  meta property="og:title" content="#{ENV['NAME']}"
+  meta property="og:description" content="#{ENV['DESCRIPTION']}"
+  meta property="og:image" content="#{ENV['IMAGE']}" 
+  meta property="og:url" content="#{ENV['BASE_URL']}" 
+  meta property="og:site_name" content="#{ENV['NAME']}" 
+
+  meta name="twitter:title" content="#{ENV['NAME']}" 
+  meta name="twitter:description" content="#{ENV['DESCRIPTION']}"
+  meta name="twitter:image" content="#{ENV['IMAGE']}" 
+  meta name="twitter:card" content="#{ENV['SUMMARY_IMAGE']}" 
+
+  meta name="title" content="#{ENV['NAME']}" 
+  meta name="description" content="#{ENV['DESCRIPTION']}" 
+  meta name="GA" content="#{ENV['GA']}" 
+
+  link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png"
+  link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png"
+  link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png"
+  link rel="manifest" href="/site.webmanifest"
+
+  script src="https://www.google.com/recaptcha/api.js"
+  script async="true" src="https://www.googletagmanager.com/gtag/js?id=GA_MEASUREMENT_ID"
+  javascript:
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', document.querySelector("meta[name='GA']").getAttribute("content"));
+
+    function onSubmit(token) {
+      document.querySelector(".recaptcha-form").submit();
+    } 

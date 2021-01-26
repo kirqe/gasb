@@ -166,3 +166,13 @@ ul.footer-creds {
   display: flex;
   height: 40px;;
 }
+
+.image-showcase {
+  max-width: 70%;
+}
+
+@media (max-width: 768px) {
+  .image-showcase {
+    max-width: 100%;
+  }
+}
