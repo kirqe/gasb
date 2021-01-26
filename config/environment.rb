@@ -13,7 +13,6 @@ require 'openssl'
 
 require 'figaro/sinatra'
 
-
 if ENV['RACK_ENV'] == 'test'
   $redis = MockRedis.new
 else
@@ -21,7 +20,7 @@ else
 end
 
 require_relative '../lib/middleware/access'
-require_relative '../lib/helpers'
+require_relative '../lib/term'
 require_relative '../models/subscription'
 require_relative '../models/plan'
 require_relative '../models/user'

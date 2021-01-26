@@ -1,6 +1,4 @@
 class Service
-  include Helpers
-
   @service_classes = []
 
   class << self
@@ -11,19 +9,15 @@ class Service
     Service.service_classes << klass
   end
   
-  def self.service_for(term, account)
-    ref = ref_id(term).first
-    service_class = Service.service_classes.find do |sc|
-      sc.ref == ref
-    end
+  def self.service_for(term, account, quota_user)
+    service_class = Service.service_classes.find { |sc| sc.ref == term.ref }
 
-    return service_class.new(term, account) if service_class
+    return service_class.new(term, account, quota_user) if service_class
     nil
   end
 
-  # 
-  def self.call(term, account)
-    service = service_for(term, account)
+  def self.call(term, account, quota_user)
+    service = service_for(term, account, quota_user)
     return nil unless service
 
     # https://developers.google.com/analytics/devguides/config/mgmt/v3/errors#backoff  
@@ -31,23 +25,25 @@ class Service
     for n in (0..5)      
       begin
         value = service.call
-        p "--N: #{n}, --S: #{service}, --V: #{value}"
+        # p "--A: #{n}, --S: #{service}, --V: #{value}"
         return value
       rescue Google::Apis::RateLimitError => e
-        p "rate error #{e}"
+        p "--RE: #{e}"
         sleep((2 ** n) + rand)
       rescue => e
-        p "some error #{e.class}"
+        p "--GE: #{e.class}"
         break
       end
     end
     value
   end
 
-  def initialize(term, account, args={})
-    @ref, @id = ref_id(term)
+  def initialize(term, account, quota_user, args={})
+    @term = term
     @service = account.service
+    @quota_user = quota_user
     @args = args
+    @metric = "ga:#{term.metric}"
   end
 end
 
@@ -56,15 +52,10 @@ class NowService < Service
     :now
   end
 
-  def initialize(term, account, args={})
-    super(term, account, args={})
-  end
-  
   def call
-    # args={metrics: 'rt:activeUsers', dimensions: 'rt:medium'} 
     metrics = 'rt:activeUsers'
     dimensions = 'rt:medium'
-    @service.get_realtime_data("ga:#{@id}", metrics, dimensions: dimensions)
+    @service.get_realtime_data("ga:#{@term.id}", metrics, dimensions: dimensions, quota_user: @quota_user)
         .totals_for_all_results[metrics]      
   end
 end
@@ -73,15 +64,10 @@ class DayService < Service
   def self.ref
     :day
   end
-
-  def initialize(term, account, args={})
-    super(term, account, args={})
-  end
   
   def call
-    metrics = 'ga:pageViews'
-    @service.get_ga_data("ga:#{@id}", 'yesterday', 'today', metrics)
-        .totals_for_all_results[metrics]   
+    @service.get_ga_data("ga:#{@term.id}", 'yesterday', 'today', @metric, quota_user: @quota_user)
+        .totals_for_all_results[@metric]   
   end
 end
 
@@ -90,14 +76,9 @@ class WeekService < Service
     :week
   end
 
-  def initialize(term, account, args={})
-    super(term, account, args={})
-  end
-
   def call
-    metrics = 'ga:pageViews'
-    @service.get_ga_data("ga:#{@id}", '7daysAgo', 'today', metrics)
-        .totals_for_all_results[metrics]    
+    @service.get_ga_data("ga:#{@term.id}", '7daysAgo', 'today', @metric, quota_user: @quota_user)
+        .totals_for_all_results[@metric]    
   end
 end
 
@@ -106,13 +87,8 @@ class MonthService < Service
     :month
   end
 
-  def initialize(term, account, args={})
-    super(term, account, args={})
-  end
-  
   def call
-    metrics = 'ga:pageViews'
-    @service.get_ga_data("ga:#{@id}", '30daysAgo', 'today', metrics)
-      .totals_for_all_results[metrics]    
+    @service.get_ga_data("ga:#{@term.id}", '30daysAgo', 'today', @metric, quota_user: @quota_user)
+      .totals_for_all_results[@metric]    
   end
 end
