@@ -6,6 +6,8 @@ default: &default
 production:
   <<: *default
   database: gasb_prod
+  username: <%= ENV['db_username'] %>
+  password: <%= ENV['db_password'] %>
 
 development:
   <<: *default
