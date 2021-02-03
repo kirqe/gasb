@@ -5,6 +5,7 @@ class Web < Sinatra::Application
   configure do
     set :views, 'views'
     set :public_folder, 'public'
+    set :method_override, true
   end
 
   get "/" do
@@ -111,7 +112,16 @@ class Web < Sinatra::Application
         redirect to "/account"
       end
     end
-  end    
+  end
+
+  delete '/account' do
+    proceed_if_authenticated do
+      @user.destroy
+      logout
+      flash :success, "You have successfully deletet your account"
+      redirect to "/"
+    end
+  end
 
   get "/instructions" do
     proceed_if_authenticated do

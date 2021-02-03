@@ -27,6 +27,7 @@ use Rack::Session::EncryptedCookie,
   :expire_after => 50000,
   :secret => ENV['rack_secret']
   
+
 # use Rack::Throttle::Rules, 
 # rules: [
 #   { method: "GET", path: "/api/status/.*", limit: 30 },
@@ -37,5 +38,5 @@ use Rack::Session::EncryptedCookie,
 
 run Rack::URLMap.new({
   '/' => Web,
-  '/api' => Api
+  '/api/v1' => Api
 })

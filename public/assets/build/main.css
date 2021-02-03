@@ -10300,6 +10300,16 @@ ul.footer-creds {
   display: flex;
   height: 40px;
 }
+
+.image-showcase {
+  max-width: 70%;
+}
+
+@media (max-width: 768px) {
+  .image-showcase {
+    max-width: 100%;
+  }
+}
 /*! @creativebulma/bulma-tooltip v1.2.0 | (c) 2020 Gaetan | MIT License | https://github.com/CreativeBulma/bulma-tooltip */
 @-webkit-keyframes spinAround {
   from {

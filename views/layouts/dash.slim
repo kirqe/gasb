@@ -1,20 +1,10 @@
 doctype html
 html
-  head
-    meta charset="utf-8" /
-    meta content="width=device-width, initial-scale=1" name="viewport" 
-    title = ENV['name']
-    link href="./assets/build/main.css" rel="stylesheet"
+  == slim :'shared/head'
   body
     == slim :'shared/notification'     
     div class="section"
-      div class="container"
-        div class="box"
-          = current_user.inspect
-          hr
-          = current_user.subscription.inspect
-          hr
-          = current_user.plan.inspect      
+      div class="container"        
         == slim :'shared/tabs'        
         == yield
 

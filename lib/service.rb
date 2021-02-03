@@ -28,10 +28,10 @@ class Service
         # p "--A: #{n}, --S: #{service}, --V: #{value}"
         return value
       rescue Google::Apis::RateLimitError => e
-        p "--RE: #{e}"
+        p "--RateError: #{e}"
         sleep((2 ** n) + rand)
       rescue => e
-        p "--GE: #{e.class}"
+        p "--GenericError: #{e}"
         break
       end
     end

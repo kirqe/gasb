@@ -53,7 +53,7 @@ class Api < Sinatra::Application
         end
       else
         {
-          message: "Invalid credentials"
+          message: "Invalid email or password"
         }.to_json
       end    
     end

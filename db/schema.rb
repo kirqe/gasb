@@ -30,6 +30,7 @@ ActiveRecord::Schema.define(version: 2021_01_16_175336) do
     t.string "refresh_token"
     t.integer "expires_at"
     t.string "cancel_url"
+    t.string "update_url"
     t.boolean "is_paused", default: false
   end
 
