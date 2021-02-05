@@ -60,7 +60,7 @@ class Web < Sinatra::Application
   post "/reset" do
     email = params[:email]
     if email
-      MailWorker.perform_async(email, "password_reset")
+      MailWorker.perform_async(email, "password_reset") unless User.find_by(email: email).nil?
     end
 
     flash :success, "A reset password link has been sent to your email. Follow the link to restore access to your account"
