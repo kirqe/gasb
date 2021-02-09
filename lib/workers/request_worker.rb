@@ -7,7 +7,7 @@ class RequestWorker
     id = term.rawString
     
     begin
-      account = Account.using(ENV["service_account"])
+      account = Account.using(ENV["SERVICE_ACCOUNT"])
       
       if account
         repo = ReportRepository.new(parser: CacheReportParser)

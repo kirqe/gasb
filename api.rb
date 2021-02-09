@@ -72,7 +72,7 @@ class Api < Sinatra::Application
       { 
         token: access_token(user),
         refreshToken: user.subscription.refresh_token,
-        expiresIn: ENV['jwt_ttl'].to_i
+        expiresIn: ENV['JWT_TTL'].to_i
       }.to_json
     end
 end

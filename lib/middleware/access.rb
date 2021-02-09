@@ -13,11 +13,11 @@ class Access
 
   def validate(env)
     begin
-      hmac_secret = ENV['jwt_secret']
+      hmac_secret = ENV['JWT_SECRET']
 
       options = { 
         algorithm: 'HS256', 
-        iss: ENV['jwt_issuer'],
+        iss: ENV['JWT_ISSUER'],
         verify_iss: true
       }
 
