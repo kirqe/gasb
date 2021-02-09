@@ -5,7 +5,7 @@ User.create(email: "test@test.com", password: "test123")
 Plan.create(
   name: "monthly", 
   price: 2.95, 
-  note: "", 
+  note: "cancel anytime", 
   paddle_product_id: 641005,
   per: "month",
   featured: false
