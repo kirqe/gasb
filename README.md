@@ -1,7 +1,7 @@
 # gasb api
 
 ```
-# /status/month:11111111?e=gasb-sa@gasb-1234123.iam.gserviceaccount.com
+GET # /api/status/month:11111111:sessions
 
-# => {"term":"month:11111111","value":48,"updated_at":"2020-11-23 02:34:55 +0300"}
+# => { "term":"month:11111111:sessions","value":48,"updated_at":"2020-11-23 02:34:55 +0300", queued: false }
 ```
