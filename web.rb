@@ -60,7 +60,7 @@ class Web < Sinatra::Application
   post "/reset" do
     email = params[:email]
     if email
-      MailWorker.perform_async(email, "password_reset") unless User.find_by(email: email).nil?
+      MailWorker.perform_async(email, "password_reset")
     end
 
     flash :success, "A reset password link has been sent to your email. Follow the link to restore access to your account"
@@ -142,7 +142,7 @@ class Web < Sinatra::Application
   get "/subscribed" do
     proceed_if_authenticated do
       flash :success, "You have successfully activated subscription. Check the instructions on how to proceed further"
-      redirect to "/account"
+      redirect to "/instructions"
     end
   end
 
@@ -176,7 +176,6 @@ class Web < Sinatra::Application
     if logged_in?
       @user = current_user
       yield
-
     else
       flash :error, "Please login"
       redirect to "/login"

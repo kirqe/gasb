@@ -6,4 +6,7 @@ config/application.yml
 node_modules
 
 /tmp
+/log
+/docker/nginx/*.crt
+/docker/nginx/*.key
 .env
