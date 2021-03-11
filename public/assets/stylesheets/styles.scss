@@ -1,11 +1,6 @@
-@import "~bulma/sass/utilities/functions";
-@import "~bulma/sass/utilities/initial-variables";
-@import "~bulma/sass/utilities/derived-variables";
-@import "~bulma/sass/utilities/mixins";
+// vars here
 
-$link: #eee;
-$background: #1e211b;
-$body-background-color:	#1e211b;
+@import "~bulma/bulma.sass";
 
 .is-b {
   /* background-color: #464f3d !important; */

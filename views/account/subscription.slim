@@ -30,7 +30,7 @@ section id="subscription" data-vendor="#{ENV['PADDLE_VENDOR_ID']}"
   - if @subscription
     - if @subscription.is_cancelled? && @subscription.is_active? # already cancelled but still active
       p class="is-size-7"
-        | You have successfully cancelled your subscription. It's still availavle till  #{Time.at(@subscription.expires_at).strftime("%d.%m.%Y-%H:%M:%S %z")}
+        | You have successfully cancelled your subscription. It's still available till  #{Time.at(@subscription.expires_at).strftime("%d.%m.%Y-%H:%M:%S %z")}
     - elsif @subscription.is_active? # active and not cancelled
       p class="is-size-7"
         a href="#{@user.subscription.cancel_url}" Cancel subscription.

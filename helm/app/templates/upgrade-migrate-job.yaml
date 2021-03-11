@@ -1,0 +1,30 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: upgrade-migrate-job
+  namespace: default
+  labels:
+    app: {{ .Values.app.name }}
+  annotations:
+    "helm.sh/hook": post-upgrade
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+spec:
+  ttlSecondsAfterFinished: 0
+  completions: 1
+  template:
+    metadata:
+      name: upgrade-migrate-job
+      labels:
+        app: {{ .Values.app.name }}
+    spec:
+      containers:
+      - name: {{ .Values.app.name }}
+        image: {{ .Values.app.container.image }}
+        imagePullPolicy: Never
+        command: ["bundle", "exec", "rake", "db:migrate"]
+        envFrom: 
+          - configMapRef:
+              name: {{ .Values.app.config.name }}
+          - secretRef:
+              name: {{ .Values.app.secret.name }}           
+      restartPolicy: Never  

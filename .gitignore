@@ -1,9 +1,10 @@
 .DS_Store
 dump.rdb
-keys/*.json
-keys/*.key
 config/application.yml
 node_modules
 
 /tmp
+/data
+/helm/*.yaml
 .env
+.ruby-version

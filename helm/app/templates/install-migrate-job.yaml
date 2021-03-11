@@ -1,0 +1,35 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: install-migrate-job
+  namespace: default
+  labels:
+    app: {{ .Values.app.name }}
+  annotations:
+    "helm.sh/hook": post-install
+    "helm.sh/hook-delete-policy": hook-succeeded,hook-failed
+spec:
+  ttlSecondsAfterFinished: 0
+  completions: 1
+  template:
+    metadata:
+      name: install-migrate-job
+      labels:
+        app: {{ .Values.app.name }}
+    spec:
+      initContainers:
+        - name: check-db-ready
+          image: postgres
+          command: ['sh', '-c', 'until pg_isready -h postgres -p 5432; 
+          do echo waiting for database; sleep 2; done;']               
+      containers:
+      - name: {{ .Values.app.name }}
+        image: {{ .Values.app.container.image }}
+        imagePullPolicy: Never
+        command: ["bundle", "exec", "rake", "db:create", "db:migrate", "db:seed"]
+        envFrom: 
+          - configMapRef:
+              name: {{ .Values.app.config.name }}
+          - secretRef:
+              name: {{ .Values.app.secret.name }}
+      restartPolicy: Never

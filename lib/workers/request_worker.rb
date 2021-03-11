@@ -1,6 +1,7 @@
 class RequestWorker
   include Sidekiq::Worker
   include Account
+  sidekiq_options queue: 'status'
 
   def perform(term, quota_user, args={})    
     term = Term.new(term)

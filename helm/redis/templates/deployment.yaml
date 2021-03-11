@@ -1,0 +1,69 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.redis.name }}
+  labels:
+    app: {{ .Values.redis.name }}
+    group: {{ .Values.redis.group }}  
+spec:
+  replicas: {{ .Values.redis.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.redis.name }}
+  strategy:
+    type: {{ .Values.redis.strategy.type }}      
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.redis.name }}
+        group: {{ .Values.redis.group }}             
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.redis.terminationGracePeriodSeconds }}
+      volumes:
+        - name: {{ .Values.redis.volume.name }}
+          persistentVolumeClaim: 
+            claimName: {{ .Values.redis.volume.pvc.name }}
+      containers:
+        - name: {{ .Values.redis.name }}
+          image: {{ .Values.redis.container.image }}
+          command: 
+            - "redis-server"
+          args: 
+            - "--requirepass"
+            - "$(REDIS_PASSWORD)"
+            - "--appendonly"
+            - "yes"
+            - "--maxmemory"
+            - "500mb"
+            - "--maxmemory-policy"
+            - "allkeys-lru"
+          ports: 
+            - containerPort: {{ .Values.redis.container.port }}
+          envFrom: 
+            - configMapRef:
+                name: {{ .Values.redis.config.name }}
+            - secretRef:
+                name: {{ .Values.redis.secret.name }}                 
+          volumeMounts:
+            - name: {{ .Values.redis.volume.name }}
+              mountPath: {{ .Values.redis.volume.mountPath }}
+          resources:
+            limits:
+              memory: 500Mi
+          livenessProbe:
+            tcpSocket:
+              port: 6379
+            failureThreshold: 3
+            initialDelaySeconds: 30
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1
+          readinessProbe:
+            exec:
+              command:
+              - redis-cli
+            failureThreshold: 3
+            initialDelaySeconds: 1
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 1

@@ -18,12 +18,12 @@ class User < ActiveRecord::Base
     allow_nil: true
 
   def has_subscription?
-    !subscription.nil?
+    !!subscription.nil?
   end
 
   def refresh_reset_token
-    generate_reset_token()
-    save()
+    generate_reset_token
+    save
   end
 
   def generate_reset_token

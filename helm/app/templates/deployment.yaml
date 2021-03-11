@@ -1,0 +1,61 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.app.name }}
+  labels:
+    app: {{ .Values.app.name }}
+    group: {{ .Values.app.group }}     
+spec:
+  replicas: {{ .Values.app.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ .Values.app.name }}
+  strategy:
+    type: {{ .Values.app.strategy.type }}      
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.app.name }}
+        group: {{ .Values.app.group }}
+      # annotations:
+      #   timestamp: "{{ date "20060102150405" .Release.Time }}"        
+    spec:
+      imagePullSecrets:
+        {{- range .Values.app.imagePullSecrets}}
+          - name: {{ .name }}
+        {{- end }}
+      terminationGracePeriodSeconds: {{ .Values.app.terminationGracePeriodSeconds }}
+      volumes:
+        {{- range .Values.app.volumes}}
+        - name: {{ .name}}
+          persistentVolumeClaim: 
+            claimName: {{ .pvc.name }}  
+        {{- end}}            
+      containers:     
+        - name: {{ .Values.app.name }}
+          image: {{ .Values.app.container.image }}        
+          command: 
+            - bundle
+            - exec
+            - puma
+          args:
+            - "-C"
+            - "config/puma.rb"          
+          imagePullPolicy: {{ .Values.app.container.imagePullPolicy }}
+          ports:
+            - containerPort: {{ .Values.app.container.port }}
+          envFrom: 
+            - configMapRef:
+                name: {{ .Values.app.config.name }}
+            - secretRef:
+                name: {{ .Values.app.secret.name }}
+          # env:
+          #   {{- range .Values.app.config.data}}
+          #   - name: {{ .key}}
+          #     value: {{ .value | quote}}
+          #   {{- end}}
+          volumeMounts:
+            {{- range .Values.app.volumes }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+            {{- end}}
