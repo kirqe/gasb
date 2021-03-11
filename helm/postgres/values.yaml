@@ -1,0 +1,32 @@
+postgres:
+  name: postgres
+  group: db
+  replicaCount: 1
+  terminationGracePeriodSeconds: 60
+  strategy:
+    type: RollingUpdate  
+  container:
+    image: postgres
+    port: 5432
+  service:
+    type: ClusterIP
+    port: 5432
+  volume:
+    name: postgres-data
+    kind: PersistentVolumeClaim
+    mountPath: /var/lib/postgresql/data
+    pvc:
+      name: postgres-persistent-volume-claim
+      accessMode: ReadWriteOnce
+      storage: 4Gi
+  config:
+    name: postgres-config
+    data:
+      - key: key
+        value: value
+  secret:
+    name: postgres-secret
+    data: 
+      - key: key
+        value: value
+    

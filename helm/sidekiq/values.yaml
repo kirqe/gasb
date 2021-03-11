@@ -1,0 +1,26 @@
+sidekiq:
+  name: sidekiq
+  group: app
+  replicaCount: 1
+  terminationGracePeriodSeconds: 60
+  strategy:
+    type: RollingUpdate  
+  container:
+    image: gasb:1.1 
+    imagePullPolicy: Never
+    port: 9292
+  imagePullSecrets:
+    - name: regcred      
+  service:
+    type: ClusterIP
+    port: 9292
+  config:
+    name: sidekiq-config    
+    data:
+      - key: key
+        value: value
+  secret:
+    name: sidekiq-secret
+    data: 
+      - key: key
+        value: value        

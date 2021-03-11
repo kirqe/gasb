@@ -31,7 +31,7 @@ module Account
       # @service.client_options.send_timeout_sec = 3600
       # @service.client_options.open_timeout_sec = 3600
       @service.authorization = Google::Auth::ServiceAccountCredentials.make_creds(
-        json_key_io: File.open(key),
+        json_key_io: ENV["G_SERVICE_ACCOUNT"] || File.open(key),
         scope: @@scope)
     end
   end

@@ -118,7 +118,7 @@ class Web < Sinatra::Application
     proceed_if_authenticated do
       @user.destroy
       logout
-      flash :success, "You have successfully deletet your account"
+      flash :success, "You have successfully deleted your account"
       redirect to "/"
     end
   end
@@ -131,7 +131,6 @@ class Web < Sinatra::Application
 
   get "/subscription" do
     proceed_if_authenticated do
-      @title = "subscription"
       @plans = Plan.all
       @subscription = @user.subscription
 
@@ -141,15 +140,14 @@ class Web < Sinatra::Application
 
   get "/subscribed" do
     proceed_if_authenticated do
-      flash :success, "You have successfully activated subscription. Check the instructions on how to proceed further"
-      redirect to "/instructions"
+      flash :success, "You have successfully activated your subscription. Check the instructions on how to proceed further"
+      redirect to "/account"
     end
   end
 
-  get "/download" do
-    proceed_if_authenticated do
-      send_file File.join(settings.public_folder, 'app/gasb.dmg')
-    end
+  get "/app" do
+    file = File.join(settings.public_folder, "downloads/gasb.dmg")
+    send_file(file, type: "application/octet-stream", disposition: "attachment")
   end
 
   post "/paddle" do

@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.sidekiq.name }}
+  labels:
+    sidekiq: {{ .Values.sidekiq.name }}
+    group: {{ .Values.sidekiq.group }}
+spec:
+  replicas: {{ .Values.sidekiq.replicaCount }}
+  selector:
+    matchLabels:
+      sidekiq: {{ .Values.sidekiq.name }}
+  strategy:
+    type: {{ .Values.sidekiq.strategy.type }}      
+  template:
+    metadata:
+      labels:
+        sidekiq: {{ .Values.sidekiq.name }}
+        group: {{ .Values.sidekiq.group }}
+      # annotations:
+      #   timestamp: "{{ date "20060102150405" .Release.Time }}"        
+    spec:
+      imagePullSecrets:
+        {{- range .Values.sidekiq.imagePullSecrets}}
+          - name: {{ .name }}
+        {{- end }} 
+      terminationGracePeriodSeconds: {{ .Values.sidekiq.terminationGracePeriodSeconds }}
+      containers:
+        - name: {{ .Values.sidekiq.name }}
+          image: {{ .Values.sidekiq.container.image }}  
+          command:
+            - bundle
+            - exec
+            - sidekiq
+          args:
+            - "-r"
+            - "./config/environment.rb"
+            - "-C"
+            - "./config/sidekiq.yml"
+          lifecycle:
+            preStop:
+              exec:
+                command: 
+                  - bundle
+                  - exec
+                  - sidekiqctl 
+                  - quiet
+          imagePullPolicy: {{ .Values.sidekiq.container.imagePullPolicy }}
+          ports:
+            - containerPort: {{ .Values.sidekiq.container.port }}
+          envFrom: 
+            - configMapRef:
+                name: {{ .Values.sidekiq.config.name }}  # reuse app's conf
+            - secretRef:
+                name: {{ .Values.sidekiq.secret.name }}                  
+          # env:
+          #   {{- range .Values.sidekiq.container.env}}
+          #   - name: {{ .key}}
+          #     value: {{ .value | quote}}
+          #   {{- end}}

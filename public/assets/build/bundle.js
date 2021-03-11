@@ -36,7 +36,7 @@ eval("document.addEventListener(\"DOMContentLoaded\", function (event) {\n  var 
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var bulma_bulma_sass__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! bulma/bulma.sass */ \"./node_modules/bulma/bulma.sass\");\n/* harmony import */ var _public_assets_stylesheets_styles_scss__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../public/assets/stylesheets/styles.scss */ \"./public/assets/stylesheets/styles.scss\");\n/* harmony import */ var _creativebulma_bulma_tooltip_dist_bulma_tooltip_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @creativebulma/bulma-tooltip/dist/bulma-tooltip.css */ \"./node_modules/@creativebulma/bulma-tooltip/dist/bulma-tooltip.css\");\n/* harmony import */ var _fortawesome_fontawesome_free_js_all__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @fortawesome/fontawesome-free/js/all */ \"./node_modules/@fortawesome/fontawesome-free/js/all.js\");\n/* harmony import */ var _fortawesome_fontawesome_free_js_all__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_fontawesome_free_js_all__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var jquery_ujs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! jquery-ujs */ \"./node_modules/jquery-ujs/src/rails.js\");\n/* harmony import */ var jquery_ujs__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(jquery_ujs__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _public_assets_javascripts_application_js__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../public/assets/javascripts/application.js */ \"./public/assets/javascripts/application.js\");\n/* harmony import */ var _public_assets_javascripts_application_js__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_public_assets_javascripts_application_js__WEBPACK_IMPORTED_MODULE_5__);\n\n\n\n\n\n\n\n//# sourceURL=webpack://gasb/./webpack/main.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _public_assets_stylesheets_styles_scss__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ../public/assets/stylesheets/styles.scss */ \"./public/assets/stylesheets/styles.scss\");\n/* harmony import */ var _creativebulma_bulma_tooltip_dist_bulma_tooltip_css__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @creativebulma/bulma-tooltip/dist/bulma-tooltip.css */ \"./node_modules/@creativebulma/bulma-tooltip/dist/bulma-tooltip.css\");\n/* harmony import */ var _fortawesome_fontawesome_free_js_all__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @fortawesome/fontawesome-free/js/all */ \"./node_modules/@fortawesome/fontawesome-free/js/all.js\");\n/* harmony import */ var _fortawesome_fontawesome_free_js_all__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_fortawesome_fontawesome_free_js_all__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var jquery_ujs__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! jquery-ujs */ \"./node_modules/jquery-ujs/src/rails.js\");\n/* harmony import */ var jquery_ujs__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(jquery_ujs__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _public_assets_javascripts_application_js__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../public/assets/javascripts/application.js */ \"./public/assets/javascripts/application.js\");\n/* harmony import */ var _public_assets_javascripts_application_js__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_public_assets_javascripts_application_js__WEBPACK_IMPORTED_MODULE_4__);\n// import \"bulma/bulma.sass\";\n\n\n\n\n\n\n//# sourceURL=webpack://gasb/./webpack/main.js?");
 
 /***/ }),
 
@@ -68,17 +68,6 @@ eval("var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!\n * jQ
 
 "use strict";
 eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack://gasb/./node_modules/@creativebulma/bulma-tooltip/dist/bulma-tooltip.css?");
-
-/***/ }),
-
-/***/ "./node_modules/bulma/bulma.sass":
-/*!***************************************!*\
-  !*** ./node_modules/bulma/bulma.sass ***!
-  \***************************************/
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack://gasb/./node_modules/bulma/bulma.sass?");
 
 /***/ }),
 
