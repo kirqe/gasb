@@ -25,7 +25,8 @@ class Api < Sinatra::Application
 
   # /api/auth token for the app
   post "/auth" do
-    params        = JSON.parse(request.body.read).symbolize_keys
+    body          = Base64.strict_decode64(request.body.read)    
+    params        = JSON.parse(body).symbolize_keys
     email         = params[:email]
     password      = params[:password]
     refresh_token = params[:rt]    

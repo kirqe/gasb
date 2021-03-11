@@ -29,4 +29,4 @@ plan = Plan.find_or_create_by(
   featured: true
 )
 
-Subscription.find_or_create_by(plan: plan, user: user, expires_at: Time.now + 60 * 60 * 24 * 365 * 10)
+Subscription.find_or_create_by(plan: plan, user: user, refresh_token: "yay", expires_at: Time.now + 60 * 60 * 24 * 365 * 10)
