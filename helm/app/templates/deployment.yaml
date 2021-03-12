@@ -17,8 +17,8 @@ spec:
       labels:
         app: {{ .Values.app.name }}
         group: {{ .Values.app.group }}
-      # annotations:
-      #   timestamp: "{{ date "20060102150405" .Release.Time }}"        
+      annotations:
+        timestamp: "{{ date "20060102150405" .Release.Time }}"        
     spec:
       imagePullSecrets:
         {{- range .Values.app.imagePullSecrets}}
@@ -49,11 +49,6 @@ spec:
                 name: {{ .Values.app.config.name }}
             - secretRef:
                 name: {{ .Values.app.secret.name }}
-          # env:
-          #   {{- range .Values.app.config.data}}
-          #   - name: {{ .key}}
-          #     value: {{ .value | quote}}
-          #   {{- end}}
           volumeMounts:
             {{- range .Values.app.volumes }}
             - name: {{ .name }}

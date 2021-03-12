@@ -17,8 +17,8 @@ spec:
       labels:
         sidekiq: {{ .Values.sidekiq.name }}
         group: {{ .Values.sidekiq.group }}
-      # annotations:
-      #   timestamp: "{{ date "20060102150405" .Release.Time }}"        
+      annotations:
+        timestamp: "{{ date "20060102150405" .Release.Time }}"        
     spec:
       imagePullSecrets:
         {{- range .Values.sidekiq.imagePullSecrets}}

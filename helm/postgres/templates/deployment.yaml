@@ -36,4 +36,3 @@ spec:
           volumeMounts:
             - name: {{ .Values.postgres.volume.name }}
               mountPath: {{ .Values.postgres.volume.mountPath }}                      
-
