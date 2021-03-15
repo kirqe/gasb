@@ -1,13 +1,12 @@
 app:
   name: app
   group: app
-  replicaCount: 1
+  replicaCount: 2
   terminationGracePeriodSeconds: 60
   strategy:
     type: RollingUpdate  
   container:
-    image: gasb:1.1   
-    imagePullPolicy: Never
+    image: kirqe/gasb
     port: 9292
   imagePullSecrets:
     - name: regcred    
@@ -17,9 +16,9 @@ app:
   volumes:
     - name: downloads-data
       kind: PersistentVolumeClaim
-      mountPath: public/downloads
+      mountPath: "/var/www/app/public/downloads"
       pvc:
-        name: downloads-persistent-volume-claim
+        name: downloads-pvc
         accessMode: ReadWriteOnce
         storage: 100Mi  
   config:

@@ -2,7 +2,6 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: upgrade-migrate-job
-  namespace: default
   labels:
     app: {{ .Values.app.name }}
   annotations:

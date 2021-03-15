@@ -18,7 +18,7 @@ postgres:
     pvc:
       name: postgres-persistent-volume-claim
       accessMode: ReadWriteOnce
-      storage: 4Gi
+      storage: 2Gi
   config:
     name: postgres-config
     data:

@@ -6,8 +6,7 @@ sidekiq:
   strategy:
     type: RollingUpdate  
   container:
-    image: gasb:1.1 
-    imagePullPolicy: Never
+    image: kirqe/gasb
     port: 9292
   imagePullSecrets:
     - name: regcred      

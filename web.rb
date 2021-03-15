@@ -6,6 +6,7 @@ class Web < Sinatra::Application
     set :views, 'views'
     set :public_folder, 'public'
     set :method_override, true
+    set :root, File.join(File.dirname(__FILE__), '..')
   end
 
   get "/" do
@@ -146,7 +147,7 @@ class Web < Sinatra::Application
   end
 
   get "/app" do
-    file = File.join(settings.public_folder, "downloads/gasb.dmg")
+    file = File.join(settings.public_folder, "downloads/gasb.zip")
     send_file(file, type: "application/octet-stream", disposition: "attachment")
   end
 

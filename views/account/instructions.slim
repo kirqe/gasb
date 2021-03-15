@@ -8,51 +8,46 @@ section id="instructions"
           li
             a> href="/app" target="_blank" Download the app
             p class="is-size-7"
-              | macOS 10.12.6 or later
-
-          li Drag the app file into Applications folder and open it
+              | macOS 10.13 or later required. Google analytics v3 only.
           li 
-            | Click menubar icon and select 
-            b Auth
+            | From the menubar select <b>Preferences</b> then click <b>Authenticate</b>
           li 
-            | Enter 
-            b Email 
-            | and 
-            b Password 
-            | used for this site (requires subscription)
+            | Enter <b>Email</b> and <b>Password</b> used for this site (requires subscription)
 
-        h1 How to start tracking a new view
+        h1 Start tracking a view
         
-        p There're 2 things required to start tracking a view: <b>View ID</b> and <b>Service Email</b>.
+        p There're 2 things required: <b>View ID</b> and <b>Service Email</b>.
 
         ul
-          li Open google analitycs
-          li Select a view
-          li Click <b>Admin</b>
+          li Open google analytics
+          li From the top menu (All accounts) select a view
+          li Click <b>Admin</b> at the bottom left corner
         
-        h5 To add Service Email
+        h4 Add Service Email
         ul
-          li Select <b>Account User Management</b> or <b>Property User Management</b> (for single property)
+          li Select <b>Account User Management</b> or <b>Property User Management</b> (for a single property)
           li Click <b>+</b> then <b>Add Users</b>
           li 
             | Enter the following Service Email:
-
             span class="tag is-info is-light mb-1" 
               b = ENV['SERVICE_ACCOUNT']
             br                                   
             | Keep <b>Read & Analize</b> checkbox selected and click <b>Add</b>
 
-        h5 To obtain View ID
+        h4 Obtain View ID
+
+        h6 For google analytics v3
         ul
           li Click <b>View Settings</b>
-          li Copy the <b>View ID</b> and add it into the app.       
+          li Copy the <b>View ID</b> and add it into the app.                
 
         p 
         | Next, in the app, give your view a friendly name and select what kind of reports you're interested in.
         br
-        | There're 2 rows in menubar. The first row shows the number of currently active users at your view. The second row shows the number of users for the last 24 hours.
+        | There're 2 rows in the menubar. The first row shows the number of currently active users. The second row shows the number of users for the last 24 hours.
           
         h1 Showcase
         img src="./app.png" class="image-showcase" alt="GASB App"/
+        p class="is-size-7 has-text-grey-light" May look different due to updates and os version
         
   == slim :'shared/help'
