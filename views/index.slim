@@ -16,8 +16,13 @@ section id="home" class="hero texture is-b is-fullheight"
               nav class="tabs"
                 ul
                   li
-                    a href="/signup" 
-                      strong Sign up                                     
+                    - if ENV["BLANK"] == "true"
+                      a href="/" 
+                        strong Sign up is temporarily paused                                                      
+                    - else
+                      a href="/signup" 
+                        strong Sign up                     
+                      
 
         div class="column is-12-tablet is-4-desktop logo-column"
           figure class="image is4by3 logo"

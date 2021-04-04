@@ -8,24 +8,31 @@ section id="instructions"
           li
             a> href="/app" target="_blank" Download the app
             p class="is-size-7"
-              | macOS 10.13 or later required. Google analytics v3 only.
+              | macOS 10.13 or later required
           li 
             | From the menubar select <b>Preferences</b> then click <b>Authenticate</b>
           li 
             | Enter <b>Email</b> and <b>Password</b> used for this site (requires subscription)
 
-        h1 Start tracking a view
+        h1 Start tracking a view or property
         
-        p There're 2 things required: <b>View ID</b> and <b>Service Email</b>.
+        p There're 2 things required: <b>View</b> or <b>Property</b> <b>ID</b> and <b>Service Email</b>.        
 
         ul
-          li Open google analytics
-          li From the top menu (All accounts) select a view
-          li Click <b>Admin</b> at the bottom left corner
+          li Open Google Analytics
+          li 
+            | From the top menu select a view or property                      
+            br
+            img src="./img/ga.png" class="image-showcase my-3" alt="Views and Properties"/
+
+          li Click <b>Admin</b> at the bottom left corner of the page
         
-        h4 Add Service Email
+        h3 Add Service Email
         ul
-          li Select <b>Account User Management</b> or <b>Property User Management</b> (for a single property)
+          li 
+            | Select <b>Account User Management</b> or <b>Property User Management</b> (for a single property)
+            br
+            img src="./img/view1.png" class="image-showcase my-3" alt="Property page view"/ 
           li Click <b>+</b> then <b>Add Users</b>
           li 
             | Enter the following Service Email:
@@ -33,18 +40,39 @@ section id="instructions"
               b = ENV['SERVICE_ACCOUNT']
             br                                   
             | Keep <b>Read & Analize</b> checkbox selected and click <b>Add</b>
+            br
+            img src="./img/property-permissions.png" class="image-showcase my-3" alt="Property permissions"/
 
-        h4 Obtain View ID
-
-        h6 For google analytics v3
+        h3 Obtain View or Property ID
+        
+        p If your property has the <b>UA-</b> part this is a <b>GA3</b> Property which may have Views.
+        p <b>GA4</b> Properties have no views and there's no <b>UA-</b> part.
+        
+        h4 For Google Analytics v3 (GA3)
         ul
           li Click <b>View Settings</b>
-          li Copy the <b>View ID</b> and add it into the app.                
+          li 
+            | Copy the <b>View ID</b> and add it into the app.
+            br
+            img src="./img/view.png" class="image-showcase my-3" alt="View page view"/
+            br
+            img src="./img/ga3-view-code.png" class="image-showcase my-3" alt="View code"/
+
+        h4 For Google Analytics v4 (GA4)
+        p The steps are the same but there're 2 columns
+        ul
+          li Click <b>Property Settings</b>
+          li 
+            | Copy the <b>Property ID</b> and add it into the app.
+            br
+            img src="./img/property.png" class="image-showcase my-3" alt="Property page view"/
+            br
+            img src="./img/ga3-property-code.png" class="image-showcase my-3" alt="Property code"/
 
         p 
-        | Next, in the app, give your view a friendly name and select what kind of reports you're interested in.
+        | Next, in the app, give your view/property a friendly name and select what kind of reports you're interested in. Make sure you select the correct value from the subjects menu.
         br
-        | There're 2 rows in the menubar. The first row shows the number of currently active users. The second row shows the number of users for the last 24 hours.
+        | There're 2 rows in the menubar. The first row shows the number of currently active users. The second row shows the value for the last 24 hours based on the selected metric.
           
         h1 Showcase
         img src="./app.png" class="image-showcase" alt="GASB App"/

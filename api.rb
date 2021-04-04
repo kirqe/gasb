@@ -1,20 +1,22 @@
 class Api < Sinatra::Application
   include Token
   use Access
-  
-  # /api/status/now:193451539:sessions
+
+  # /api/status/now:view:123456789:sessions
+  # /api/status/now:property:123456789:sessions
   get "/status/:term" do
     term = Term.new(params[:term])
     quota_user = env[:email]
-
+    
     if term.is_valid?
-      repo = ReportRepository.new(parser: CacheReportParser)
-
-      report = repo.find(term.rawString, as: term.ref) # :now :day :week :month
+      repo = ReportRepository.new()
+      report = repo.find(term.rawString)
       report = repo.create(term.rawString) unless report
-
+      
       if report.can_be_updated?
-        RequestWorker.perform_async(term.rawString, quota_user)
+        term.kind == "view" ? 
+        Ga3StatusWorker.perform_async(term.rawString, quota_user) : 
+        Ga4StatusWorker.perform_async(term.rawString, quota_user)      
       end
       
       report.to_json

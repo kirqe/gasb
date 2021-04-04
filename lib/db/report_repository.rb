@@ -1,33 +1,33 @@
+# mess...
 class ReportRepository
-  def initialize(args={})
-    @parser = args[:parser]
-  end
+  # def initialize(args={})
+  #   @parser = args[:parser]
+  # end
 
   def create(id)
-    report = Report.new(id)
+    reportClass = representation(id)
+    report = reportClass.new({term: id})
     Cache.set(id, report.to_h)
     report
   end
 
-  def update(id, data)   
-    old_data = parsed_hash(id)
-    new_data = old_data.merge(data)        
+  def update(id, data)    
+    old_data = Cache.get(id)
+    new_data = old_data.merge(data)          
     Cache.set(id, new_data)
-    Report.new(id, new_data)
+
+    reportClass = representation(id)
+    report = reportClass.new(new_data)
+    report
   end  
 
-  def find(id, args={})
+  def find(id)  
     report = nil
     if Cache.exists?(id)
-      data = parsed_hash(id)
+      data = Cache.get(id)
       
-      if args[:as]
-        data.merge!(args)
-        report = Report.new_as(id, data)
-      else
-        report = Report.new(id, data)
-      end
-      
+      reportClass = representation(id)
+      report = reportClass.new(data)        
     end
     report
   end
@@ -41,13 +41,18 @@ class ReportRepository
   end
 
   private
-    # redis returns values as Strings
-    # use parser class to transform values
-    def parsed_hash(id)
-      data = Cache.get(id)
-      if @parser
-        data = @parser.new(data).to_h
-      end
-      data
+    def representation(rawTerm)
+      term = Term.new(rawTerm)
+      Report.select(term.label)
     end
+
+    # # redis returns values as Strings
+    # # use parser class to transform values
+    # def parsed_hash(id)
+    #   data = Cache.get(id)
+    #   if @parser
+    #     data = @parser.new(data).to_h
+    #   end
+    #   data
+    # end
 end

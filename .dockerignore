@@ -3,6 +3,7 @@
 .gitignore
 README.md
 /helm/*.yaml
+/keys/*
 log
 tmp
 node_modules

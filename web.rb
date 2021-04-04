@@ -1,5 +1,6 @@
 class Web < Sinatra::Application
-  include Token
+  use Blank
+  # include Token
   include Paddle
   
   configure do

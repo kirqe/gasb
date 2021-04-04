@@ -1,4 +1,5 @@
 :queues:
   - [default, 1]
-  - [status, 1]
+  - [ga3_status, 1]
+  - [ga4_status, 1]
   - [mailers, 2]

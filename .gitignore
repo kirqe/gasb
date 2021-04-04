@@ -6,5 +6,6 @@ node_modules
 /tmp
 /data
 /helm/*.yaml
+/keys/*
 .env
 .ruby-version

@@ -3,6 +3,7 @@ source "https://rubygems.org"
 gem 'puma'
 gem "sinatra"
 gem "google-apis-analytics_v3"
+gem "google-apis-analyticsdata_v1beta"
 gem "sidekiq"
 gem "redis"
 gem "require_all"
