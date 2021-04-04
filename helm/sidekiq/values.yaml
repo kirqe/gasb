@@ -13,6 +13,14 @@ sidekiq:
   service:
     type: ClusterIP
     port: 9292
+  volumes:
+    - name: keys-data
+      kind: PersistentVolumeClaim
+      mountPath: "/var/www/app/keys"
+      pvc:
+        name: keys-pvc
+        accessMode: ReadWriteOnce
+        storage: 5Mi   
   config:
     name: sidekiq-config    
     data:

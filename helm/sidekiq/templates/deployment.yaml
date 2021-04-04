@@ -24,7 +24,13 @@ spec:
         {{- range .Values.sidekiq.imagePullSecrets}}
           - name: {{ .name }}
         {{- end }} 
-      terminationGracePeriodSeconds: {{ .Values.sidekiq.terminationGracePeriodSeconds }}
+      terminationGracePeriodSeconds: {{ .Values.sidekiq.terminationGracePeriodSeconds }}    
+      volumes:
+        {{- range .Values.sidekiq.volumes}}
+        - name: {{ .name}}
+          persistentVolumeClaim: 
+            claimName: {{ .pvc.name }}  
+        {{- end}}      
       containers:
         - name: {{ .Values.sidekiq.name }}
           image: {{ .Values.sidekiq.container.image }}  
@@ -53,8 +59,8 @@ spec:
                 name: {{ .Values.sidekiq.config.name }}  # reuse app's conf
             - secretRef:
                 name: {{ .Values.sidekiq.secret.name }}                  
-          # env:
-          #   {{- range .Values.sidekiq.container.env}}
-          #   - name: {{ .key}}
-          #     value: {{ .value | quote}}
-          #   {{- end}}
+          volumeMounts:
+            {{- range .Values.sidekiq.volumes }}
+            - name: {{ .name }}
+              mountPath: {{ .mountPath }}
+            {{- end}}
