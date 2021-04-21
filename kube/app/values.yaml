@@ -1,33 +1,45 @@
-sidekiq:
-  name: sidekiq
+app:
+  name: app
   group: app
   replicaCount: 1
   terminationGracePeriodSeconds: 60
   strategy:
     type: RollingUpdate  
   container:
-    image: kirqe/gasb
+    image: r.kirqe.be/gasb:latest
     port: 9292
   imagePullSecrets:
-    - name: regcred      
+    - name: regzzz    
   service:
     type: ClusterIP
     port: 9292
   volumes:
+    - name: downloads-data
+      kind: PersistentVolumeClaim
+      mountPath: "/var/www/app/public/downloads"
+      pvc:
+        name: downloads-pvc
+        accessMode: ReadWriteOnce
+        storage: 100Mi
     - name: keys-data
       kind: PersistentVolumeClaim
       mountPath: "/var/www/app/keys"
       pvc:
         name: keys-pvc
         accessMode: ReadWriteOnce
-        storage: 5Mi   
+        storage: 5Mi  
   config:
-    name: sidekiq-config    
+    name: app-config
     data:
       - key: key
         value: value
   secret:
-    name: sidekiq-secret
+    name: app-secret
     data: 
       - key: key
-        value: value        
+        value: value
+    
+vault:
+  role: gasb-role
+  path: secret/data/gasb/app
+

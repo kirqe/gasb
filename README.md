@@ -1,7 +1,5 @@
 # gasb api
 
-#### TLDR how it works
-
 ```
 GET # /api/status/month:11111111:sessions
 
@@ -13,10 +11,7 @@ GET # /api/status/month:11111111:sessions
 #### Notes and links
 
 ```
-helm/global.yaml
-helm/ingress.yaml
-
-helm install -f ingress.yaml ingress ingress/
+helm install -f vals.yaml app app/
 ```
 
 - [cert-manager](https://cert-manager.io/docs/installation/kubernetes/)

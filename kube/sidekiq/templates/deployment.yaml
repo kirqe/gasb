@@ -18,7 +18,16 @@ spec:
         sidekiq: {{ .Values.sidekiq.name }}
         group: {{ .Values.sidekiq.group }}
       annotations:
-        timestamp: "{{ date "20060102150405" .Release.Time }}"        
+        timestamp: "{{ date "20060102150405" .Release.Time }}"
+        vault.hashicorp.com/agent-inject: "true"             
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-inject-secret-app: "{{ .Values.vault.path }}"        
+        vault.hashicorp.com/agent-inject-template-app: |
+          {{`{{- with secret`}} "{{ .Values.vault.path }}" {{`-}}`}}
+          {{`{{ range $Key, $Value := .Data.data }}export {{$Key}}="{{$Value}}"`}}
+          {{`{{ end }}`}}
+          {{`{{- end -}}`}}
+        vault.hashicorp.com/role: {{ .Values.vault.role }}          
     spec:
       imagePullSecrets:
         {{- range .Values.sidekiq.imagePullSecrets}}
@@ -33,16 +42,9 @@ spec:
         {{- end}}      
       containers:
         - name: {{ .Values.sidekiq.name }}
-          image: {{ .Values.sidekiq.container.image }}  
-          command:
-            - bundle
-            - exec
-            - sidekiq
-          args:
-            - "-r"
-            - "./config/environment.rb"
-            - "-C"
-            - "./config/sidekiq.yml"
+          image: {{ .Values.sidekiq.container.image }}
+          command: ["/bin/bash", "-c"]
+          args: ["source /vault/secrets/* && bundle exec sidekiq -r ./config/environment.rb -C ./config/sidekiq.yml"]
           lifecycle:
             preStop:
               exec:
@@ -54,11 +56,11 @@ spec:
           imagePullPolicy: {{ .Values.sidekiq.container.imagePullPolicy }}
           ports:
             - containerPort: {{ .Values.sidekiq.container.port }}
-          envFrom: 
-            - configMapRef:
-                name: {{ .Values.sidekiq.config.name }}  # reuse app's conf
-            - secretRef:
-                name: {{ .Values.sidekiq.secret.name }}                  
+          # envFrom: 
+          #   - configMapRef:
+          #       name: {{ .Values.sidekiq.config.name }}  # reuse app's conf
+          #   - secretRef:
+          #       name: {{ .Values.sidekiq.secret.name }}                  
           volumeMounts:
             {{- range .Values.sidekiq.volumes }}
             - name: {{ .name }}

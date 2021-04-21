@@ -1,0 +1,17 @@
+ingress:
+  name: ingress
+  hosts:
+    - host: gasb.app
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: app
+            port:
+              number: 9292
+
+  tls:
+    - hosts:
+      - "gasb.app"
+      secretName: gasb-app-tls

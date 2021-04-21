@@ -15,6 +15,18 @@ spec:
       name: install-migrate-job
       labels:
         app: {{ .Values.app.name }}
+      annotations:
+        timestamp: "{{ date "20060102150405" .Release.Time }}"
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-pre-populate: "true"
+        vault.hashicorp.com/agent-inject-secret-app: "{{ .Values.vault.path }}"        
+        vault.hashicorp.com/agent-inject-template-app: |
+          {{`{{- with secret`}} "{{ .Values.vault.path }}" {{`-}}`}}
+          {{`{{ range $Key, $Value := .Data.data }}export {{$Key}}="{{$Value}}"`}}
+          {{`{{ end }}`}}
+          {{`{{- end -}}`}}
+        vault.hashicorp.com/role: {{ .Values.vault.role }}          
     spec:
       initContainers:
         - name: check-db-ready

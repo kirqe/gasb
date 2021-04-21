@@ -18,8 +18,18 @@ spec:
         app: {{ .Values.app.name }}
         group: {{ .Values.app.group }}
       annotations:
-        timestamp: "{{ date "20060102150405" .Release.Time }}"        
+        timestamp: "{{ date "20060102150405" .Release.Time }}"
+        vault.hashicorp.com/agent-inject: "true"
+        vault.hashicorp.com/agent-inject-status: "update"
+        vault.hashicorp.com/agent-inject-secret-app: "{{ .Values.vault.path }}"        
+        vault.hashicorp.com/agent-inject-template-app: |
+          {{`{{- with secret`}} "{{ .Values.vault.path }}" {{`-}}`}}
+          {{`{{ range $Key, $Value := .Data.data }}export {{$Key}}="{{$Value}}"`}}
+          {{`{{ end }}`}}
+          {{`{{- end -}}`}}
+        vault.hashicorp.com/role: {{ .Values.vault.role }}    
     spec:
+      serviceAccountName: app
       imagePullSecrets:
         {{- range .Values.app.imagePullSecrets}}
           - name: {{ .name }}
@@ -34,23 +44,15 @@ spec:
       containers:     
         - name: {{ .Values.app.name }}
           image: {{ .Values.app.container.image }}        
-          command: 
-            - bundle
-            - exec
-            - puma
-          args:
-            - "-C"
-            - "config/puma.rb"          
+          command: ["/bin/bash", "-c"]
+          args: ["source /vault/secrets/* && bundle exec puma -C config/puma.rb"]         
           imagePullPolicy: {{ .Values.app.container.imagePullPolicy }}
           ports:
             - containerPort: {{ .Values.app.container.port }}
-          envFrom: 
-            - configMapRef:
-                name: {{ .Values.app.config.name }}
-            - secretRef:
-                name: {{ .Values.app.secret.name }}
           volumeMounts:
             {{- range .Values.app.volumes }}
             - name: {{ .name }}
               mountPath: {{ .mountPath }}
             {{- end}}
+
+            
