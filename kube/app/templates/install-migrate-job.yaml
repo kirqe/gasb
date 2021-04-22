@@ -37,7 +37,8 @@ spec:
       - name: {{ .Values.app.name }}
         image: {{ .Values.app.container.image }}
         imagePullPolicy: Never
-        command: ["bundle", "exec", "rake", "db:create", "db:migrate", "db:seed"]
+        command: ["/bin/bash", "-c"]
+        args: ["source /vault/secrets/* && bundle exec rake db:create db:migrate db:seed"]
         envFrom: 
           - configMapRef:
               name: {{ .Values.app.config.name }}
