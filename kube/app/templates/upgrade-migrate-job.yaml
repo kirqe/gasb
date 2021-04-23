@@ -18,8 +18,7 @@ spec:
       annotations:
         timestamp: "{{ date "20060102150405" .Release.Time }}"
         vault.hashicorp.com/agent-inject: "true"
-        vault.hashicorp.com/agent-inject-status: "update"
-        vault.hashicorp.com/agent-pre-populate: "true"
+        vault.hashicorp.com/agent-pre-populate-only: "true"
         vault.hashicorp.com/agent-inject-secret-app: "{{ .Values.vault.path }}"        
         vault.hashicorp.com/agent-inject-template-app: |
           {{`{{- with secret`}} "{{ .Values.vault.path }}" {{`-}}`}}
@@ -28,15 +27,11 @@ spec:
           {{`{{- end -}}`}}
         vault.hashicorp.com/role: {{ .Values.vault.role }}             
     spec:
+      serviceAccountName: app
       containers:
       - name: {{ .Values.app.name }}
         image: {{ .Values.app.container.image }}
         imagePullPolicy: Never
         command: ["/bin/bash", "-c"]
-        args: ["source /vault/secrets/* && bundle exec rake db:migrate"]
-        envFrom: 
-          - configMapRef:
-              name: {{ .Values.app.config.name }}
-          - secretRef:
-              name: {{ .Values.app.secret.name }}           
+        args: ["source /vault/secrets/* && bundle exec rake db:migrate"]           
       restartPolicy: Never  

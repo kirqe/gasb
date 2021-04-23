@@ -1,7 +1,7 @@
 app:
   name: app
   group: app
-  replicaCount: 2
+  replicaCount: 1
   terminationGracePeriodSeconds: 60
   strategy:
     type: RollingUpdate  

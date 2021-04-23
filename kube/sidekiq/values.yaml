@@ -20,17 +20,7 @@ sidekiq:
       pvc:
         name: keys-pvc
         accessMode: ReadWriteOnce
-        storage: 5Mi   
-  config:
-    name: sidekiq-config    
-    data:
-      - key: key
-        value: value
-  secret:
-    name: sidekiq-secret
-    data: 
-      - key: key
-        value: value        
+        storage: 5Mi     
 
 vault:
   role: gasb-role
