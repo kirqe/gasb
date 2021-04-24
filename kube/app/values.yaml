@@ -28,18 +28,7 @@ app:
         name: keys-pvc
         accessMode: ReadWriteOnce
         storage: 5Mi  
-  config:
-    name: app-config
-    data:
-      - key: key
-        value: value
-  secret:
-    name: app-secret
-    data: 
-      - key: key
-        value: value
-    
+
 vault:
   role: gasb-role
   path: secret/data/gasb/app
-
