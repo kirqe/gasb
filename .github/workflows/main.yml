@@ -10,6 +10,21 @@ jobs:
     name: Build
     runs-on: ubuntu-latest
     steps:
+    - name: Login to registry
+      uses: docker/login-action@v1 
+      with:
+        registry: r.kirqe.be
+        username: ${{ secrets.RPRIV_REG_UN }}
+        password: ${{ secrets.RPRIV_REG_PS }}
+          
+    - name: Build and push Docker images
+      uses: docker/build-push-action@v2.4.0
+      with:
+        context: .
+        push: true
+        tags: |
+          r.kirqe.be/gasb:latest      
+        
     - name: trigger single Job
       uses: appleboy/jenkins-action@master
       with:
