@@ -1,0 +1,21 @@
+
+name: CI
+
+on:
+  push:
+    branches: [master]
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Trigger Jenkins Job
+        uses: appleboy/jenkins-action@0.0.1
+        with:
+          url: "https://jen.kirqe.be"
+          user: "admin"
+          token: ${{ secrets.JENKINS_TOKEN }}
+          job: "gasb"
