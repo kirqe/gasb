@@ -1,11 +1,12 @@
 app:
   name: app
   group: app
-  replicaCount: 1
+  replicaCount: 3
   terminationGracePeriodSeconds: 60
   strategy:
     type: RollingUpdate  
   container:
+    imagePullPolicy: Always
     image: r.kirqe.be/gasb:latest
     port: 9292
   imagePullSecrets:

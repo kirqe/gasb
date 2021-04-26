@@ -1,4 +1,4 @@
-FROM ruby:2.7.2
+FROM ruby:2.7.3
 
 RUN apt-get update -qq && apt-get install -y build-essential ca-certificates libpq-dev nodejs postgresql-client yarn vim -y
 
