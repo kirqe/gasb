@@ -1,7 +1,7 @@
 name: trigger jenkins job
 on:
   push:
-    branches: [master]
+    branches: [release]
   
   workflow_dispatch:
 
@@ -20,7 +20,7 @@ jobs:
         username: ${{ secrets.RPRIV_REG_UN }}
         password: ${{ secrets.RPRIV_REG_PS }}
           
-    - name: Build and push Docker images
+    - name: Build and push Docker registry
       uses: docker/build-push-action@v2.4.0
       with:
         context: .
@@ -28,7 +28,7 @@ jobs:
         tags: |
           r.kirqe.be/gasb:latest
 
-    - name: Helm 3
+    - name: Deploy
       uses: WyriHaximus/github-action-helm3@v2.0
       with:
         exec: helm upgrade app ./kube/app/ --install --wait --atomic --namespace=gasb
