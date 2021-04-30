@@ -21,7 +21,7 @@ Plan.find_or_create_by(
 )
 
 plan = Plan.find_or_create_by(
-  name: "annualy", 
+  name: "annually", 
   price: 25.95, 
   note: "~ $2 per month", 
   paddle_product_id: 639997,
