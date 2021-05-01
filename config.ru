@@ -1,13 +1,18 @@
 require './config/environment'
 
+use Rack::Session::EncryptedCookie, 
+:key => 'rack.session',
+:expire_after => 50000,
+:secret => ENV['RACK_SECRET']
+
 Sidekiq.configure_client do |config|
   config.redis = { url: ENV['REDIS_URL'] }
   config.average_scheduled_poll_interval = 5 # reduce worker delay
 end
+
 Sidekiq.default_worker_options['retry'] = false
 
 map "/kiq" do
-  Sidekiq::Web.set :sessions, false
   use Rack::Auth::Basic, "Protected Area" do |username, password|
     Rack::Utils.secure_compare(
       ::Digest::SHA256.hexdigest(username), 
@@ -21,12 +26,6 @@ map "/kiq" do
 
   run Sidekiq::Web
 end
-
-use Rack::Session::EncryptedCookie, 
-  :key => 'rack.session',
-  :expire_after => 50000,
-  :secret => ENV['RACK_SECRET']
-  
 
 # use Rack::Throttle::Rules, 
 # rules: [

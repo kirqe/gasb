@@ -31,9 +31,10 @@ jobs:
     - name: Deploy
       uses: WyriHaximus/github-action-helm3@v2.0
       with:
-        exec: helm upgrade app ./kube/app/ --install --wait --atomic --namespace=gasb
+        exec: |
+          helm upgrade app ./kube/app/ --install --wait --atomic --namespace=gasb
+          helm upgrade sidekiq ./kube/sidekiq/ --install --wait --atomic --namespace=gasb
         kubeconfig: '${{ secrets.KUBE_CONFIG }}'
-
         
 #     - name: trigger single Job
 #       uses: appleboy/jenkins-action@master
