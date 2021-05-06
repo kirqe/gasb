@@ -73,7 +73,7 @@ module Paddle
   end
 
   def verify_hook(data)
-    public_key = ENV["PADDLE_PUB_KEY"] || File.read("./keys/pub.key")
+    public_key = File.read("keys/pub.key")
 
     signature = Base64.decode64(data['p_signature'])
     data.delete('p_signature')
