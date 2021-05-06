@@ -1,6 +1,6 @@
 class Web < Sinatra::Application
   use Blank
-  # include Token
+  include Token
   include Paddle
   
   configure do
@@ -61,7 +61,7 @@ class Web < Sinatra::Application
 
   post "/reset" do
     email = params[:email]
-    if email
+    if email && !email.empty?
       MailWorker.perform_async(email, "password_reset")
     end
 
